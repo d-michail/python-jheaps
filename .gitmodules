@@ -1,0 +1,3 @@
+[submodule "vendor/source/jheaps-capi"]
+	path = vendor/source/jheaps-capi
+	url = git@github.com:d-michail/jheaps-capi.git
