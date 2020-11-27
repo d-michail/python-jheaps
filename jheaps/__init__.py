@@ -37,7 +37,6 @@ from . import (
     types,
 )
 
-
 from ._internals._heaps import (
     _create_double_heap,
 )

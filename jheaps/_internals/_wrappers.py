@@ -17,8 +17,8 @@ class _HandleWrapper:
         return self._handle
 
     def __del__(self):
-        if backend.jgrapht_is_initialized():
-            backend.jgrapht_handles_destroy(self._handle)
+        if backend.jheaps_is_initialized():
+            backend.jheaps_handles_destroy(self._handle)
 
     def __repr__(self):
         return "_HandleWrapper(%r)" % self._handle

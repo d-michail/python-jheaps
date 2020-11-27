@@ -3,65 +3,33 @@ from collections.abc import Mapping
 
 from .backend import HeapType
 
-
-class GraphPath(ABC):
-    """Interface for a graph path."""
+class AddressableHeapHandle(ABC):
+    """Interface for an addressable heap handle."""
 
     @abstractmethod
-    def weight(self):
-        """Weight of the path.
-
-        :rtype: Double
+    def get_key(self):
+        """Get the key
         """
         pass
 
     @abstractmethod
-    def start_vertex(self):
-        """Starting vertex of the path."""
-        pass
-
-    @abstractmethod
-    def end_vertex(self):
-        """Ending vertex of the path."""
-        pass
-
-    @abstractmethod
-    def edges(self):
-        """Edges of the path.
-
-        :rtype: :class:`collections.abc.Iterable`
+    def get_value(self):
+        """Get the value
+        :rtype: long integer
         """
         pass
 
-    @abstractmethod
-    def graph(self):
-        """The graph that this graph path refers to.
 
-        :rtype: :class:`jgrapht.types.Graph`
+
+class AddressableHeap(ABC):
+    """Interface for an addressable heap."""
+
+    @abstractmethod
+    def find_min(self):
+        """Return a handle for the minimum element.
+
+        :rtype: :class:`.AddressableHeapHandle`
         """
         pass
-
-    @abstractmethod
-    def __iter__(self):
-        pass
-
-    @property
-    def vertices(self):
-        """Vertices of the path."""
-        v_list = []
-
-        if len(self.edges) == 0:
-            start = self.start_vertex
-            if start is not None and start == self.end_vertex:
-                v_list.append(start)
-            return v_list
-
-        v = self.start_vertex
-        v_list.append(v)
-        for e in self.edges:
-            v = self.graph.opposite(e, v)
-            v_list.append(v)
-
-        return v_list
 
 
