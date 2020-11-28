@@ -68,6 +68,14 @@ int jheaps_handles_get_ccharpointer(void *, char**);
 
 int jheaps_heap_create(heap_type_t, void**);
 
+int jheaps_dary_heap_create(heap_type_t, int, void**);
+
+int jheaps_soft_heap_create(heap_type_t, double, void**);
+
+int jheaps_double_radix_heap_create(heap_type_t, double, double, void**);
+
+int jheaps_long_radix_heap_create(heap_type_t, long long int, long long int, void**);
+
 int jheaps_MAHeap_D_meld(void *, void *);
 
 int jheaps_MAHeap_L_meld(void *, void *);

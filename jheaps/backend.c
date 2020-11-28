@@ -177,6 +177,26 @@ int jheaps_heap_create(heap_type_t type, void** res) {
     return jheaps_capi_heap_create(thread, type, res);
 }
 
+int jheaps_dary_heap_create(heap_type_t type, int d, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jheaps_capi_dary_heap_create(thread, type, d, res);
+}
+
+int jheaps_soft_heap_create(heap_type_t type, double error_rate, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jheaps_capi_soft_heap_create(thread, type, error_rate, res);
+}
+
+int jheaps_double_radix_heap_create(heap_type_t type, double min_key, double max_key, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jheaps_capi_double_radix_heap_create(thread, type, min_key, max_key, res);
+}
+
+int jheaps_long_radix_heap_create(heap_type_t type, long long int min_key, long long int max_key, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jheaps_capi_long_radix_heap_create(thread, type, min_key, max_key, res);
+}
+
 int jheaps_MAHeap_D_meld(void *heap1, void *heap2) { 
     LAZY_THREAD_ATTACH
     return jheaps_capi_MAHeap_D_meld(thread, heap1, heap2);

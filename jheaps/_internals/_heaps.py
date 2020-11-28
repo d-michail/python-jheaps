@@ -130,7 +130,7 @@ class _LongAddressableHeap(_BaseAddressableHeap):
 
 
 
-def _create_double_heap(type=HeapType.PAIRING):
+def _create_double_heap(type=HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_PAIRING):
     """Create a heap with double keys.
 
     TODO: kind of heap
@@ -141,7 +141,7 @@ def _create_double_heap(type=HeapType.PAIRING):
     return _DoubleAddressableHeap(handle)
 
 
-def _create_long_heap(type=HeapType.PAIRING):
+def _create_long_heap(type=HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_PAIRING):
     """Create a heap with long keys.
 
     TODO: kind of heap
