@@ -39,7 +39,11 @@ from . import (
 
 from ._internals._heaps import (
     _create_double_heap,
+    _create_long_heap,
 )
 
-def create_heap():
+def create_double_heap():
     return _create_double_heap()
+
+def create_long_heap():
+    return _create_long_heap()
