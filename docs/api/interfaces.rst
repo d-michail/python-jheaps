@@ -15,4 +15,8 @@ The main interface of the library is the :class:`AddressableHeap <jheaps.types.A
    :inherited-members:
    :members:
 
+.. autoclass:: jheaps.types.AddressableHeapHandle
+   :inherited-members:
+   :members:
+
 

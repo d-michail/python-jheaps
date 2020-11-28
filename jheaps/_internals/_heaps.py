@@ -1,11 +1,13 @@
 from .. import backend
 from ..types import (
     HeapType,
+    AddressableHeapHandle,
+    AddressableHeap,
 )
 from ._wrappers import _HandleWrapper
 
 
-class _AddressableHeapHandle(_HandleWrapper):
+class _DoubleAddressableHeapHandle(_HandleWrapper, AddressableHeapHandle):
     """A handle on an element in a heap.
     """
     def __init__(self, handle, **kwargs):
@@ -30,7 +32,7 @@ class _AddressableHeapHandle(_HandleWrapper):
         backend.jheaps_AHeapHandle_delete(self._handle)
 
     def __repr__(self):
-        return "_AddressableHeapHandle(%r)" % self._handle
+        return "_DoubleAddressableHeapHandle(%r)" % self._handle
 
 
 class _DoubleAddressableHeap(_HandleWrapper): 
@@ -42,15 +44,15 @@ class _DoubleAddressableHeap(_HandleWrapper):
 
     def insert(self, key, value=0):
         res = backend.jheaps_AHeap_D_insert_key_value(self._handle, key, value)
-        return _AddressableHeapHandle(res)
+        return _DoubleAddressableHeapHandle(res)
 
     def find_min(self):
         res = backend.jheaps_AHeap_find_min(self._handle)
-        return _AddressableHeapHandle(res)
+        return _DoubleAddressableHeapHandle(res)
 
     def delete_min(self):
         res = backend.jheaps_AHeap_delete_min(self._handle)
-        return _AddressableHeapHandle(res)
+        return _DoubleAddressableHeapHandle(res)
 
     def clear(self):
         backend.jheaps_AHeap_clear(self._handle)
