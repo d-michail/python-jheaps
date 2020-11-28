@@ -25,6 +25,7 @@ def _module_cleanup_function():
 
     backend.jheaps_cleanup()
 
+
 atexit.register(_module_cleanup_function)
 del atexit
 
@@ -40,10 +41,54 @@ from . import (
 from ._internals._heaps import (
     _create_double_heap,
     _create_long_heap,
+    HeapType as _HeapType,
 )
 
-def create_double_heap():
-    return _create_double_heap()
+def _create_heap(key_type, heap_type): 
+    if key_type == float:
+        return _create_double_heap(type=heap_type)
+    elif key_type == int:
+        return _create_long_heap(type=heap_type)
+    else:
+        raise ValueError("Keys can be float or int.")
 
-def create_long_heap():
-    return _create_long_heap()
+
+def create_fibonacci(key_type=float, simple=False, double_ended=False):
+    if simple:
+        heap_type = _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_FIBONACCI_SIMPLE
+    elif double_ended:
+        heap_type = (
+            _HeapType.HEAP_TYPE_DOUBLEENDED_MERGEABLE_ADDRESSABLE_FIBONACCI_REFLECTED
+        )
+    else:
+        heap_type = _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_FIBONACCI
+
+    return _create_heap(key_type, heap_type)
+
+
+def create_pairing(key_type=float, rank=False, costless_meld=False, double_ended=False):
+    if rank:
+        heap_type = _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_RANKPAIRING
+    elif costless_meld:
+        heap_type = _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_COSTLESSMELD_PAIRING
+    elif double_ended:
+        heap_type = (
+            _HeapType.HEAP_TYPE_DOUBLEENDED_MERGEABLE_ADDRESSABLE_PAIRING_REFLECTED
+        )
+    else:
+        heap_type = _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_PAIRING
+
+    return _create_heap(key_type, heap_type)
+
+
+def create_hollow(key_type=float):
+    return _create_heap(key_type, _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_HOLLOW)
+
+
+def create_leftist(key_type=float):
+    return _create_heap(key_type, _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_LEFTIST)
+
+
+def create_skew(key_type=float):
+    return _create_heap(key_type, _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_SKEW)    
+

@@ -104,3 +104,52 @@ class AddressableHeap(ABC):
         :rtype: :class:`.AddressableHeapHandle`
         """
         pass
+
+
+class Heap(ABC):
+    """Interface for a heap."""
+
+    @abstractmethod
+    def find_min(self):
+        """Return the minimum key.
+        """
+        pass
+
+    @abstractmethod
+    def delete_min(self):
+        """Delete the minimum element and return its key.
+        """
+        pass
+    
+    @abstractmethod
+    def is_empty(self):
+        """Check if the heap is empty.
+
+        :returns: whether the heap is empty or not
+        :rtype: boolean
+        """
+        pass
+
+    @abstractmethod
+    def clear(self):
+        """Clear the heap
+        """
+        pass
+
+    @abstractmethod
+    def __len__(self):
+        """Return the number of elements in the heap.
+
+        :returns: the number of elements in the heap
+        :rtype: long integer
+        """
+        pass
+
+    @abstractmethod
+    def insert(self, key):
+        """Insert a new element.
+
+        :param key: the key
+        """
+        pass
+    

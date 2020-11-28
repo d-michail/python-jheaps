@@ -3,13 +3,13 @@ import pytest
 from random import Random
 
 from jheaps import (
-    create_double_heap,
+    create_pairing
 )
 
 
 def test_double_heap(): 
 
-    h = create_double_heap()
+    h = create_pairing()
 
     h1 = h.insert(5.5, 15)
     assert h1.key == 5.5
@@ -54,7 +54,7 @@ def test_sort_with_heap():
     for i in range(10000):
         numbers.append(rng.random())
 
-    heap = create_double_heap()
+    heap = create_pairing()
     for n in numbers: 
         heap.insert(n)
 
