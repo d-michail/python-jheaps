@@ -223,9 +223,7 @@ sphinx_gallery_conf = {
     'examples_dirs': '../examples',   # path to your example scripts
     'subsection_order': ExplicitOrder(
         [
-            '../examples/algorithms',
-            '../examples/io',
-            '../examples/draw_matplotlib',
+            '../examples/addressable',
         ]
     ),
     'gallery_dirs': 'auto_examples',  # path to where to save gallery generated output
