@@ -87,9 +87,19 @@ int jheaps_AHeap_D_insert_key(void *heap, double key, void** res) {
     return jheaps_capi_AHeap_D_insert_key(thread, heap, key, res);
 }
 
+int jheaps_AHeap_L_insert_key(void *heap, long long int key, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jheaps_capi_AHeap_L_insert_key(thread, heap, key, res);
+}
+
 int jheaps_AHeap_D_insert_key_value(void *heap, double key, long long int value, void** res) { 
     LAZY_THREAD_ATTACH
     return jheaps_capi_AHeap_D_insert_key_value(thread, heap, key, value, res);
+}
+
+int jheaps_AHeap_L_insert_key_value(void *heap, long long int key, long long int value, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jheaps_capi_AHeap_L_insert_key_value(thread, heap, key, value, res);
 }
 
 int jheaps_AHeap_find_min(void *heap, void** res) { 
@@ -122,6 +132,11 @@ int jheaps_AHeapHandle_D_get_key(void *handle, double* res) {
     return jheaps_capi_AHeapHandle_D_get_key(thread, handle, res);
 }
 
+int jheaps_AHeapHandle_L_get_key(void *handle, long long* res) { 
+    LAZY_THREAD_ATTACH
+    return jheaps_capi_AHeapHandle_L_get_key(thread, handle, res);
+}
+
 int jheaps_AHeapHandle_get_value(void *handle, long long* res) {
     LAZY_THREAD_ATTACH
     return jheaps_capi_AHeapHandle_get_value(thread, handle, res);
@@ -135,6 +150,11 @@ int jheaps_AHeapHandle_set_value(void *handle, long long int value) {
 int jheaps_AHeapHandle_D_decrease_key(void *handle, double key) {
     LAZY_THREAD_ATTACH
     return jheaps_capi_AHeapHandle_D_decrease_key(thread, handle, key);
+}
+
+int jheaps_AHeapHandle_L_decrease_key(void *handle, long long int key) {
+    LAZY_THREAD_ATTACH
+    return jheaps_capi_AHeapHandle_L_decrease_key(thread, handle, key);
 }
 
 int jheaps_AHeapHandle_delete(void *handle) { 
@@ -160,6 +180,11 @@ int jheaps_heap_create(heap_type_t type, void** res) {
 int jheaps_MAHeap_D_meld(void *heap1, void *heap2) { 
     LAZY_THREAD_ATTACH
     return jheaps_capi_MAHeap_D_meld(thread, heap1, heap2);
+}
+
+int jheaps_MAHeap_L_meld(void *heap1, void *heap2) { 
+    LAZY_THREAD_ATTACH
+    return jheaps_capi_MAHeap_L_meld(thread, heap1, heap2);
 }
 
 

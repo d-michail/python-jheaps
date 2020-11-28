@@ -32,7 +32,11 @@ void jheaps_vmLocatorSymbol();
 
 int jheaps_AHeap_D_insert_key(void *, double, void**);
 
+int jheaps_AHeap_L_insert_key(void *, long long int, void**);
+
 int jheaps_AHeap_D_insert_key_value(void *, double, long long int, void**);
+
+int jheaps_AHeap_L_insert_key_value(void *, long long int, long long int, void**);
 
 int jheaps_AHeap_find_min(void *, void**);
 
@@ -46,11 +50,15 @@ int jheaps_AHeap_clear(void *);
 
 int jheaps_AHeapHandle_D_get_key(void *, double*);
 
+int jheaps_AHeapHandle_L_get_key(void *, long long*);
+
 int jheaps_AHeapHandle_get_value(void *, long long*);
 
 int jheaps_AHeapHandle_set_value(void *, long long int);
 
 int jheaps_AHeapHandle_D_decrease_key(void *, double);
+
+int jheaps_AHeapHandle_L_decrease_key(void *, long long int);
 
 int jheaps_AHeapHandle_delete(void *);
 
@@ -61,6 +69,8 @@ int jheaps_handles_get_ccharpointer(void *, char**);
 int jheaps_heap_create(heap_type_t, void**);
 
 int jheaps_MAHeap_D_meld(void *, void *);
+
+int jheaps_MAHeap_L_meld(void *, void *);
 
 
 
