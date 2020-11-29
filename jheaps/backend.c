@@ -197,6 +197,51 @@ int jheaps_long_radix_heap_create(heap_type_t type, long long int min_key, long 
     return jheaps_capi_long_radix_heap_create(thread, type, min_key, max_key, res);
 }
 
+int jheaps_Heap_D_insert_key(void *heap, double key) { 
+    LAZY_THREAD_ATTACH
+    return jheaps_capi_Heap_D_insert_key(thread, heap, key);
+}
+
+int jheaps_Heap_L_insert_key(void *heap, long long int key) {
+    LAZY_THREAD_ATTACH
+    return jheaps_capi_Heap_L_insert_key(thread, heap, key);
+}
+
+int jheaps_Heap_D_find_min(void *heap, double* res) {
+    LAZY_THREAD_ATTACH
+    return jheaps_capi_Heap_D_find_min(thread, heap, res);
+}
+
+int jheaps_Heap_L_find_min(void *heap, long long* res) {
+    LAZY_THREAD_ATTACH
+    return jheaps_capi_Heap_L_find_min(thread, heap, res);
+}
+
+int jheaps_Heap_D_delete_min(void *heap, double* res) {
+    LAZY_THREAD_ATTACH
+    return jheaps_capi_Heap_D_delete_min(thread, heap, res);
+}
+
+int jheaps_Heap_L_delete_min(void *heap, long long* res) {
+    LAZY_THREAD_ATTACH
+    return jheaps_capi_Heap_L_delete_min(thread, heap, res);
+}
+
+int jheaps_Heap_size(void *heap, long long* res) {
+    LAZY_THREAD_ATTACH
+    return jheaps_capi_Heap_size(thread, heap, res);
+}
+
+int jheaps_Heap_isempty(void *heap, int* res) {
+    LAZY_THREAD_ATTACH
+    return jheaps_capi_Heap_isempty(thread, heap, res);
+}
+
+int jheaps_Heap_clear(void *heap) {
+    LAZY_THREAD_ATTACH
+    return jheaps_capi_Heap_clear(thread, heap);
+}
+
 int jheaps_MAHeap_D_meld(void *heap1, void *heap2) { 
     LAZY_THREAD_ATTACH
     return jheaps_capi_MAHeap_D_meld(thread, heap1, heap2);

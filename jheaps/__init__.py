@@ -39,18 +39,22 @@ from . import (
 )
 
 from ._internals._heaps import (
-    _create_double_heap,
-    _create_long_heap,
+    _create_heap,
     HeapType as _HeapType,
 )
 
-def _create_heap(key_type, heap_type): 
-    if key_type == float:
-        return _create_double_heap(type=heap_type)
-    elif key_type == int:
-        return _create_long_heap(type=heap_type)
-    else:
-        raise ValueError("Keys can be float or int.")
+def create_dary(key_type=float, d=4, explicit=False):
+    if explicit: 
+        heap_type = _HeapType.HEAP_TYPE_ADDRESSABLE_DARY_IMPLICIT
+    else: 
+        heap_type = _HeapType.HEAP_TYPE_ADDRESSABLE_DARY_IMPLICIT
+    
+    return _create_heap()
+    pass
+
+
+def create_binary(key_type=float, explicit=False, weak=False):
+    pass
 
 
 def create_fibonacci(key_type=float, simple=False, double_ended=False):
