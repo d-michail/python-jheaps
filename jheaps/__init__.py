@@ -39,7 +39,7 @@ from . import (
 )
 
 from ._internals._heaps import (
-    _create_heap,
+    _create_addressable_heap,
     HeapType as _HeapType,
 )
 
@@ -49,11 +49,13 @@ def create_dary(key_type=float, d=4, explicit=False):
     else: 
         heap_type = _HeapType.HEAP_TYPE_ADDRESSABLE_DARY_IMPLICIT
     
-    return _create_heap()
+    # TODO
+
     pass
 
 
 def create_binary(key_type=float, explicit=False, weak=False):
+    # TODO
     pass
 
 
@@ -67,7 +69,7 @@ def create_fibonacci(key_type=float, simple=False, double_ended=False):
     else:
         heap_type = _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_FIBONACCI
 
-    return _create_heap(key_type, heap_type)
+    return _create_addressable_heap(key_type, heap_type)
 
 
 def create_pairing(key_type=float, rank=False, costless_meld=False, double_ended=False):
@@ -82,17 +84,17 @@ def create_pairing(key_type=float, rank=False, costless_meld=False, double_ended
     else:
         heap_type = _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_PAIRING
 
-    return _create_heap(key_type, heap_type)
+    return _create_addressable_heap(key_type, heap_type)
 
 
 def create_hollow(key_type=float):
-    return _create_heap(key_type, _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_HOLLOW)
+    return _create_addressable_heap(key_type, _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_HOLLOW)
 
 
 def create_leftist(key_type=float):
-    return _create_heap(key_type, _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_LEFTIST)
+    return _create_addressable_heap(key_type, _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_LEFTIST)
 
 
 def create_skew(key_type=float):
-    return _create_heap(key_type, _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_SKEW)    
+    return _create_addressable_heap(key_type, _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_SKEW)    
 
