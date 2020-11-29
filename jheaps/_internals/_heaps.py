@@ -187,9 +187,7 @@ class _LongHeap(_BaseHeap):
 
 
 def _create_addressable_heap(key_type, type: HeapType):
-    """Create a heap with double keys.
-
-    TODO: kind of heap
+    """Create an addressable heap.
 
     :returns: a heap
     """
@@ -201,3 +199,16 @@ def _create_addressable_heap(key_type, type: HeapType):
     
     raise ValueError("Invalid key type")
 
+
+def _create_heap(key_type, type: HeapType):
+    """Create a heap.
+
+    :returns: a heap
+    """
+    handle = backend.jheaps_heap_create(type.value)
+    if key_type == float: 
+        return _DoubleHeap(handle)
+    elif key_type == int:
+        return _LongHeap(handle)
+    
+    raise ValueError("Invalid key type")

@@ -40,6 +40,7 @@ from . import (
 
 from ._internals._heaps import (
     _create_addressable_heap,
+    _create_heap,
     HeapType as _HeapType,
 )
 
@@ -49,14 +50,37 @@ def create_dary(key_type=float, d=4, explicit=False):
     else: 
         heap_type = _HeapType.HEAP_TYPE_ADDRESSABLE_DARY_IMPLICIT
     
-    # TODO
-
-    pass
+    return _create_addressable_heap(key_type, heap_type)
 
 
-def create_binary(key_type=float, explicit=False, weak=False):
-    # TODO
-    pass
+def create_weak_binary(key_type=float, bulk_insert=False):
+    if bulk_insert:
+        heap_type = _HeapType.HEAP_TYPE_BINARY_IMPLICIT_WEAK_BULKINSERT
+    else:
+        heap_type = _HeapType.HEAP_TYPE_BINARY_IMPLICIT_WEAK
+    
+    return _create_heap(key_type, heap_type)
+
+
+def create_binary(key_type=float, explicit=False, addressable=False):
+    """Create a binary heap. 
+
+    :param key_type: the key type
+    :type key_type: int or float    
+    :param explicit: if true explicit, otherwise implicit (array-based)
+    :param addressable: if true addressable, otherwise not. Only valid for implicit
+        since explicit are by default addressable
+    """
+    if explicit:
+        heap_type = _HeapType.HEAP_TYPE_ADDRESSABLE_BINARY_EXPLICIT
+        return _create_addressable_heap(key_type, heap_type)
+    else: 
+        if addressable: 
+            heap_type = _HeapType.HEAP_TYPE_ADDRESSABLE_BINARY_IMPLICIT
+            return _create_addressable_heap(key_type, heap_type)
+        else:
+            heap_type = _HeapType.HEAP_TYPE_BINARY_IMPLICIT
+            return _create_heap(key_type, heap_type)
 
 
 def create_fibonacci(key_type=float, simple=False, double_ended=False):
@@ -88,6 +112,11 @@ def create_pairing(key_type=float, rank=False, costless_meld=False, double_ended
 
 
 def create_hollow(key_type=float):
+    """Create a hollow heap.
+
+    :param key_type: the key type
+    :type key_type: int or float
+    """
     return _create_addressable_heap(key_type, _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_HOLLOW)
 
 
@@ -98,3 +127,20 @@ def create_leftist(key_type=float):
 def create_skew(key_type=float):
     return _create_addressable_heap(key_type, _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_SKEW)    
 
+
+def create_radix(key_type=float, addressable=False):
+    if addressable: 
+        if key_type == float: 
+            heap_type = _HeapType.HEAP_TYPE_MONOTONE_ADDRESSABLE_DOUBLE_RADIX
+        elif key_type == int:
+            heap_type = _HeapType.HEAP_TYPE_MONOTONE_ADDRESSABLE_LONG_RADIX
+    else:
+        if key_type == float: 
+            heap_type = _HeapType.HEAP_TYPE_MONOTONE_DOUBLE_RADIX
+        elif key_type == int:
+            heap_type = _HeapType.HEAP_TYPE_MONOTONE_LONG_RADIX
+
+    if addressable:
+        return _create_addressable_heap(key_type, heap_type)
+    else:
+        return _create_heap(key_type, heap_type)
