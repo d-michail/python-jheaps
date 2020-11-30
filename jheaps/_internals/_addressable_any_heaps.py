@@ -67,8 +67,13 @@ class _BaseAnyAddressableHeapHandle(_HandleWrapper, AddressableHeapHandle):
 
     def delete(self):
         backend.jheaps_AHeapHandle_delete(self._handle)
+
+    def __del__(self):
+        # Custom deletion to allow getter/setters to still function until 
+        # garbage collected
         id = backend.jheaps_AHeapHandle_get_value(self._handle)
         self._id_map.delete(id)
+        super().__del__()
 
     def __repr__(self):
         return "_BaseAnyAddressableHeapHandle(%r)" % self._handle

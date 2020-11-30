@@ -33,19 +33,19 @@ def _create_heap(key_type, type: _HeapType):
     raise ValueError("Invalid key type")
 
 
-def _create_addressable_heap(type: _HeapType, key_type, value_type):
+def _create_addressable_heap(type: _HeapType, key_type, use_int_values=True):
     """Create an addressable heap.
 
     :returns: a heap
     """
     handle = backend.jheaps_heap_create(type.value)
     if key_type == float:
-        if value_type == int: 
+        if use_int_values: 
             return _DoubleLongAddressableHeap(handle)
         else:
             return _DoubleAnyAddressableHeap(handle)
     elif key_type == int:
-        if value_type == int: 
+        if use_int_values: 
             return _LongLongAddressableHeap(handle)
         else:
             return _LongAnyAddressableHeap(handle)
