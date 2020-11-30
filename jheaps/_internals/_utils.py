@@ -24,3 +24,10 @@ def _ref_count(obj, normalize=True):
     if normalize:
         # remove function argument, getrefcount temporary reference and function stack
         return count - 3
+
+def _id_to_obj(id):
+    """Cast an id to an object. Note that this method if 
+       called on non-existent object, will crash Python.
+    """
+    return ctypes.cast(id, ctypes.py_object).value
+
