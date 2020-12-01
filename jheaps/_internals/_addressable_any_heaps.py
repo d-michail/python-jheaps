@@ -5,65 +5,38 @@ from ..types import (
 )
 from ._wrappers import _HandleWrapper
 
-
-class _IdMap():
-    """Helper class which maintains a bidirectional mapping between long values
-    and hashable objects.
-    """
-    def __init__(self):
-        self._map = dict()
-        self._inverse = dict()
-        self._next_id = int()
-
-    def next_id(self):
-        id = self._next_id
-        self._next_id += 1
-        return id
-
-    def put(self, id, value): 
-        self._map[id] = value
-        if value is not None:
-            self._inverse[value] = id
-
-    def update(self, id, value):
-        self._map[id] = value
-        if value is None:
-            self._inverse.pop(value, None)
-        else:
-            self._inverse[value] = id
-
-    def get(self, id):
-        return self._map[id]
-
-    def get_inverse(self, value):
-        return self._inverse[value]
-
-    def delete(self, id):
-        value = self._map.pop(id)
-        if value is not None:
-            del self._inverse[value]
-
-    def clear(self):
-        self._map.clear()
-        self._inverse.clear()
+from ._utils import (
+    _inc_ref,
+    _dec_ref,
+    _id_to_obj,
+)
 
 
 class _BaseAnyAddressableHeapHandle(_HandleWrapper, AddressableHeapHandle):
     """A handle on an element in a heap. This handle supports any object as value.
     """
-    def __init__(self, handle, id_map: _IdMap, **kwargs):
+    def __init__(self, handle, **kwargs):
         super().__init__(handle=handle, **kwargs)
-        self._id_map = id_map
 
     @property
     def value(self):
-        id = backend.jheaps_AHeapHandle_get_value(self._handle)
-        return self._id_map.get(id)
+        value_id = backend.jheaps_AHeapHandle_get_value(self._handle)
+        return _id_to_obj(value_id)
 
     @value.setter
     def value(self, v):
-        id = backend.jheaps_AHeapHandle_get_value(self._handle)
-        self._id_map.update(id, v)
+        if v is None: 
+            raise ValueError('Value cannot be None')
+
+        # clean old value
+        old_value_id = backend.jheaps_AHeapHandle_get_value(self._handle)
+        old_value = _id_to_obj(old_value_id)
+        _dec_ref(old_value)
+
+        # set new value
+        _inc_ref(v)
+        value_id = id(v)
+        backend.jheaps_AHeapHandle_set_value(self._handle, value_id)
 
     def delete(self):
         backend.jheaps_AHeapHandle_delete(self._handle)
@@ -71,8 +44,9 @@ class _BaseAnyAddressableHeapHandle(_HandleWrapper, AddressableHeapHandle):
     def __del__(self):
         # Custom deletion to allow getter/setters to still function until 
         # garbage collected
-        id = backend.jheaps_AHeapHandle_get_value(self._handle)
-        self._id_map.delete(id)
+        value_id = backend.jheaps_AHeapHandle_get_value(self._handle)
+        value = _id_to_obj(value_id)
+        _dec_ref(value)
         super().__del__()
 
     def __repr__(self):
@@ -83,8 +57,8 @@ class _DoubleAnyAddressableHeapHandle(_BaseAnyAddressableHeapHandle):
     """A handle on an element in a heap. This handle supports double keys
     and any hashable value.
     """
-    def __init__(self, handle, id_map: _IdMap, **kwargs):
-        super().__init__(handle, id_map, **kwargs)
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle, **kwargs)
 
     @property
     def key(self):
@@ -101,8 +75,8 @@ class _LongAnyAddressableHeapHandle(_BaseAnyAddressableHeapHandle):
     """A handle on an element in a heap. This handle supports long keys 
     and any hashable value.
     """
-    def __init__(self, handle, id_map: _IdMap, **kwargs):
-        super().__init__(handle, id_map, **kwargs)
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle, **kwargs)
 
     @property
     def key(self):
@@ -121,11 +95,9 @@ class _BaseAnyAddressableHeap(_HandleWrapper):
     """
     def __init__(self, handle, **kwargs):
         super().__init__(handle=handle, **kwargs)
-        self._id_map = _IdMap()
 
     def clear(self):
         backend.jheaps_AHeap_clear(self._handle)
-        self._id_map.clear()
 
     def __len__(self):
         return backend.jheaps_AHeap_size(self._handle)
@@ -145,18 +117,20 @@ class _DoubleAnyAddressableHeap(_BaseAnyAddressableHeap):
         super().__init__(handle=handle, **kwargs)
 
     def insert(self, key, value):
-        id = self._id_map.next_id()
-        res = backend.jheaps_AHeap_D_insert_key_value(self._handle, key, id)
-        self._id_map.put(id, value)
-        return _DoubleAnyAddressableHeapHandle(res, self._id_map)
+        if value is None: 
+            raise ValueError('Value cannot be None')
+        _inc_ref(value)
+        value_id = id(value)
+        res = backend.jheaps_AHeap_D_insert_key_value(self._handle, key, value_id)
+        return _DoubleAnyAddressableHeapHandle(res)
 
     def find_min(self):
         res = backend.jheaps_AHeap_find_min(self._handle)
-        return _DoubleAnyAddressableHeapHandle(res, self._id_map)
+        return _DoubleAnyAddressableHeapHandle(res)
 
     def delete_min(self):
         res = backend.jheaps_AHeap_delete_min(self._handle)
-        return _DoubleAnyAddressableHeapHandle(res, self._id_map)
+        return _DoubleAnyAddressableHeapHandle(res)
 
     def __repr__(self):
         return "_DoubleAnyAddressableHeap(%r)" % self._handle
@@ -170,18 +144,20 @@ class _LongAnyAddressableHeap(_BaseAnyAddressableHeap):
         super().__init__(handle=handle, **kwargs)
 
     def insert(self, key, value):
-        id = self._id_map.next_id()
-        res = backend.jheaps_AHeap_L_insert_key_value(self._handle, key, id)
-        self._id_map.put(id, value)
-        return _LongAnyAddressableHeapHandle(res, self._id_map)
+        if value is None: 
+            raise ValueError('Value cannot be None')
+        _inc_ref(value)
+        value_id = id(value)
+        res = backend.jheaps_AHeap_L_insert_key_value(self._handle, key, value_id)
+        return _LongAnyAddressableHeapHandle(res)
 
     def find_min(self):
         res = backend.jheaps_AHeap_find_min(self._handle)
-        return _LongAnyAddressableHeapHandle(res, self._id_map)
+        return _LongAnyAddressableHeapHandle(res)
 
     def delete_min(self):
         res = backend.jheaps_AHeap_delete_min(self._handle)
-        return _LongAnyAddressableHeapHandle(res, self._id_map)
+        return _LongAnyAddressableHeapHandle(res)
 
     def __repr__(self):
         return "_LongAnyAddressableHeap(%r)" % self._handle
