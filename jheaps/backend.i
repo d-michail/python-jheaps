@@ -247,6 +247,12 @@ int jheaps_double_radix_heap_create(heap_type_t, double, double, void** OUTPUT);
 
 int jheaps_long_radix_heap_create(heap_type_t, long long int, long long int, void** OUTPUT);
 
+int jheaps_heap_comparator_create(heap_type_t, void *LONG_TO_FPTR, void** OUTPUT);
+
+int jheaps_dary_heap_comparator_create(heap_type_t, void *LONG_TO_FPTR, int, void** OUTPUT);
+
+int jheaps_soft_heap_comparator_create(heap_type_t, void *LONG_TO_FPTR, double, void** OUTPUT);
+
 int jheaps_Heap_D_insert_key(void *, double);
 
 int jheaps_Heap_L_insert_key(void *, long long int);

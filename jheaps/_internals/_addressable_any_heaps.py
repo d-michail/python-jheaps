@@ -89,6 +89,41 @@ class _LongAnyAddressableHeapHandle(_BaseAnyAddressableHeapHandle):
         return "_LongAnyAddressableHeapHandle(%r)" % self._handle
 
 
+class _AnyAnyAddressableHeapHandle(_BaseAnyAddressableHeapHandle):
+    """A handle on an element in a heap. This handle supports any hashable key
+    and any hashable value.
+    """
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle, **kwargs)
+
+    @property
+    def key(self):
+        key_id = backend.jheaps_AHeapHandle_L_get_key(self._handle)
+        return _id_to_obj(key_id)
+
+    def decrease_key(self, key):
+        # clean old key
+        old_key_id = backend.jheaps_AHeapHandle_L_get_key(self._handle)
+        old_key = _id_to_obj(old_key_id)
+        _dec_ref(old_key)
+
+        # set new key
+        _inc_ref(key)
+        key_id = id(key)
+        backend.jheaps_AHeapHandle_L_decrease_key(self._handle, key_id)
+
+    def __del__(self):
+        # Custom deletion to allow getter/setters to still function until 
+        # garbage collected
+        key_id = backend.jheaps_AHeapHandle_L_get_key(self._handle)
+        key = _id_to_obj(key_id)
+        _dec_ref(key)
+        super().__del__()
+
+    def __repr__(self):
+        return "_AnyAnyAddressableHeapHandle(%r)" % self._handle
+
+
 class _BaseAnyAddressableHeap(_HandleWrapper): 
     """A Heap with any hashable values. All operations are delegated
     to the backend.

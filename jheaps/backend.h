@@ -76,6 +76,12 @@ int jheaps_double_radix_heap_create(heap_type_t, double, double, void**);
 
 int jheaps_long_radix_heap_create(heap_type_t, long long int, long long int, void**);
 
+int jheaps_heap_comparator_create(heap_type_t, void *, void**);
+
+int jheaps_dary_heap_comparator_create(heap_type_t, void *, int, void**);
+
+int jheaps_soft_heap_comparator_create(heap_type_t, void *, double, void**);
+
 int jheaps_Heap_D_insert_key(void *, double);
 
 int jheaps_Heap_L_insert_key(void *, long long int);

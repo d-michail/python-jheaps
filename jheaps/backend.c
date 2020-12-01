@@ -197,6 +197,21 @@ int jheaps_long_radix_heap_create(heap_type_t type, long long int min_key, long 
     return jheaps_capi_long_radix_heap_create(thread, type, min_key, max_key, res);
 }
 
+int jheaps_heap_comparator_create(heap_type_t type, void *comparator, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jheaps_capi_heap_comparator_create(thread, type, comparator, res);
+}
+
+int jheaps_dary_heap_comparator_create(heap_type_t type, void *comparator, int d, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jheaps_capi_dary_heap_comparator_create(thread, type, comparator, d, res);
+}
+
+int jheaps_soft_heap_comparator_create(heap_type_t type, void *comparator, double error_rate, void** res) { 
+    LAZY_THREAD_ATTACH
+    return jheaps_capi_soft_heap_comparator_create(thread, type, comparator, error_rate, res);
+}
+
 int jheaps_Heap_D_insert_key(void *heap, double key) { 
     LAZY_THREAD_ATTACH
     return jheaps_capi_Heap_D_insert_key(thread, heap, key);
