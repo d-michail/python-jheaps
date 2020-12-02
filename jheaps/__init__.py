@@ -38,10 +38,16 @@ from . import (
     types,
 )
 
+from ._internals._utils import (
+    _id_comparator,
+    _create_wrapped_id_comparator_callback,
+)
+
 from ._internals._factories import (
     _HeapType,
-    _create_heap,
-    _create_addressable_heap,
+    _create_and_wrap_heap,
+    _create_and_wrap_dary_heap,
+    _create_and_wrap_radix_heap,
 )
 
 
@@ -51,16 +57,39 @@ def create_addressable_dary_heap(key_type=float, value_type=int, d=4, explicit=F
     else:
         heap_type = _HeapType.HEAP_TYPE_ADDRESSABLE_DARY_IMPLICIT
 
-    return _create_addressable_heap(heap_type, key_type, value_type)
+    return _create_and_wrap_dary_heap(
+        heap_type,
+        d,
+        key_type,
+        value_type=value_type,
+        addressable=True,
+    )
 
 
-def create_weak_binary_heap(key_type=float, bulk_insert=False):
+def create_implicit_dary_heap(key_type=float, d=4):
+    heap_type = _HeapType.HEAP_TYPE_DARY_IMPLICIT
+
+    return _create_and_wrap_dary_heap(
+        heap_type,
+        d,
+        key_type,
+        value_type=None,
+        addressable=False,
+    )
+
+
+def create_implicit_weak_binary_heap(key_type=float, bulk_insert=False):
     if bulk_insert:
         heap_type = _HeapType.HEAP_TYPE_BINARY_IMPLICIT_WEAK_BULKINSERT
     else:
         heap_type = _HeapType.HEAP_TYPE_BINARY_IMPLICIT_WEAK
 
-    return _create_heap(key_type, heap_type)
+    return _create_and_wrap_heap(
+        heap_type,
+        key_type,
+        value_type=None,
+        addressable=False,
+    )
 
 
 def create_implicit_binary_heap(key_type=float):
@@ -70,7 +99,13 @@ def create_implicit_binary_heap(key_type=float):
     :type key_type: int or float
     """
     heap_type = _HeapType.HEAP_TYPE_BINARY_IMPLICIT
-    return _create_heap(key_type, heap_type)
+
+    return _create_and_wrap_heap(
+        heap_type,
+        key_type,
+        value_type=None,
+        addressable=False,
+    )
 
 
 def create_addressable_binary_heap(key_type=float, value_type=int, explicit=False):
@@ -85,7 +120,12 @@ def create_addressable_binary_heap(key_type=float, value_type=int, explicit=Fals
     else:
         heap_type = _HeapType.HEAP_TYPE_ADDRESSABLE_BINARY_IMPLICIT
 
-    return _create_addressable_heap(heap_type, key_type, value_type)
+    return _create_and_wrap_heap(
+        heap_type,
+        key_type,
+        value_type,
+        addressable=True,
+    )
 
 
 def create_addressable_fibonacci_heap(
@@ -100,7 +140,12 @@ def create_addressable_fibonacci_heap(
     else:
         heap_type = _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_FIBONACCI
 
-    return _create_addressable_heap(heap_type, key_type, value_type)
+    return _create_and_wrap_heap(
+        heap_type,
+        key_type,
+        value_type,
+        addressable=True,
+    )
 
 
 def create_addressable_pairing_heap(
@@ -117,7 +162,12 @@ def create_addressable_pairing_heap(
     else:
         heap_type = _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_PAIRING
 
-    return _create_addressable_heap(heap_type, key_type, value_type)
+    return _create_and_wrap_heap(
+        heap_type,
+        key_type,
+        value_type,
+        addressable=True,
+    )
 
 
 def create_addressable_hollow_heap(key_type=float, value_type=int):
@@ -126,24 +176,39 @@ def create_addressable_hollow_heap(key_type=float, value_type=int):
     :param key_type: the key type
     :type key_type: int, float or object
     """
-    return _create_addressable_heap(
-        _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_HOLLOW, key_type, value_type
+    heap_type = _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_HOLLOW
+
+    return _create_and_wrap_heap(
+        heap_type,
+        key_type,
+        value_type,
+        addressable=True,
     )
 
 
 def create_addressable_leftist_heap(key_type=float, value_type=int):
-    return _create_addressable_heap(
-        _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_LEFTIST, key_type, value_type
+    heap_type = _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_LEFTIST
+
+    return _create_and_wrap_heap(
+        heap_type,
+        key_type,
+        value_type,
+        addressable=True,
     )
 
 
 def create_addressable_skew_heap(key_type=float, value_type=int):
-    return _create_addressable_heap(
-        _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_SKEW, key_type, value_type
+    heap_type = _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_SKEW
+
+    return _create_and_wrap_heap(
+        heap_type,
+        key_type,
+        value_type,
+        addressable=True,
     )
 
 
-def create_addressable_radix_heap(key_type=float, value_type=int):
+def create_addressable_radix_heap(key_type=float, value_type=int, min=None, max=None):
     if key_type == float:
         heap_type = _HeapType.HEAP_TYPE_MONOTONE_ADDRESSABLE_DOUBLE_RADIX
     elif key_type == int:
@@ -151,15 +216,43 @@ def create_addressable_radix_heap(key_type=float, value_type=int):
     else:
         raise ValueError("Radix heaps support float or int keys")
 
-    # TODO: fixme here (min, max)
-    return _create_addressable_heap(heap_type, key_type, value_type)
+    if min is None:
+        min = key_type()
+    if not isinstance(min, key_type):
+        raise TypeError('Min value not valid')
+
+    if max is None:
+        if key_type == float:
+            max = float('0x1.fffffffffffffP+1023')
+        elif key_type == int:
+            max = int('0x7fffffff')
+    if not isinstance(max, key_type):
+        raise TypeError('Max value not valid')
+
+    return _create_and_wrap_radix_heap(
+        heap_type, min, max, key_type, value_type, addressable=True
+    )
 
 
-def create_radix_heap(key_type=float):
+def create_radix_heap(key_type=float, min=None, max=None):
     if key_type == float:
         heap_type = _HeapType.HEAP_TYPE_MONOTONE_DOUBLE_RADIX
     elif key_type == int:
         heap_type = _HeapType.HEAP_TYPE_MONOTONE_LONG_RADIX
 
-    # TODO: fixme here (min, max)
-    return _create_heap(key_type, heap_type)
+    if min is None:
+        min = key_type()
+    if not isinstance(min, key_type):
+        raise TypeError('Min value not valid')
+
+    if max is None:
+        if key_type == float:
+            max = float('0x1.fffffffffffffP+1023')
+        elif key_type == int:
+            max = int('0x7fffffff')
+    if not isinstance(max, key_type):
+        raise TypeError('Max value not valid')
+
+    return _create_and_wrap_radix_heap(
+        heap_type, min, max, key_type, value_type=None, addressable=False
+    )
