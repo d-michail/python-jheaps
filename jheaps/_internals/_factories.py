@@ -54,7 +54,7 @@ def _wrap_heap(handle, key_type=float, value_type=int, comparator=None, addressa
 
 
 def _create_and_wrap_heap(heap_type, key_type, value_type, addressable):
-    if key_type != int or key_type != float: 
+    if key_type != int and key_type != float: 
         f_ptr, f = _create_wrapped_id_comparator_callback(_id_comparator)
         handle = backend.jheaps_heap_comparator_create(heap_type.value, f_ptr)
         return _wrap_heap(handle, key_type, value_type, comparator=f, addressable=addressable)
@@ -64,8 +64,7 @@ def _create_and_wrap_heap(heap_type, key_type, value_type, addressable):
 
 
 def _create_and_wrap_dary_heap(heap_type, d, key_type, value_type, addressable):
-
-    if key_type != int or key_type != float: 
+    if key_type != int and key_type != float: 
         f_ptr, f = _create_wrapped_id_comparator_callback(_id_comparator)
         handle = backend.jheaps_dary_heap_comparator_create(heap_type.value, f_ptr, d)
         return _wrap_heap(handle, key_type, value_type, comparator=f, addressable=addressable)
