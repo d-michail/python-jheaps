@@ -55,3 +55,19 @@ def _id_comparator(a_id, b_id):
     if a.__eq(b): 
         return 0
     return 1
+
+
+def _create_wrapped_id_comparator_callback(callback): 
+    if callback is not None:
+        # wrap the comparator with a ctypes function pointer
+        callback_type = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.c_longlong, ctypes.c_longlong)
+        f = callback_type(callback)
+
+        # get the function pointer of the ctypes wrapper by casting it to void* and taking its value
+        # we perform the reverse using typemaps on the SWIG layer
+        f_ptr = ctypes.cast(f, ctypes.c_void_p).value
+
+        # make sure to also return the callback to avoid garbage collection
+        return (f_ptr, f)
+    else: 
+        return (0, None)

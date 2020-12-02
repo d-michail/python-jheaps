@@ -9,7 +9,7 @@ from jheaps import (
 
 def test_double_any_value_heap(): 
 
-    h = create_pairing(key_type=float, use_int_values=False)
+    h = create_pairing(key_type=float, value_type=object)
 
     h1 = h.insert(5.5, "15")
     assert h1.key == 5.5

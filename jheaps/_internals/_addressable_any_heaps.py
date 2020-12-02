@@ -14,10 +14,12 @@ from ._utils import (
     _id_comparator,
 )
 
+from ._addressable_heaps import _BaseLongValueAddressableHeapHandle
 
-class _BaseAnyAddressableHeapHandle(_HandleWrapper, AddressableHeapHandle):
-    """A handle on an element in a heap. This handle supports any object as value.
-    """
+
+class _BaseAnyValueAddressableHeapHandle(_HandleWrapper, AddressableHeapHandle):
+    """A handle on an element in a heap. This handle supports any object as value."""
+
     def __init__(self, handle, key_owner=False, value_owner=False, **kwargs):
         super().__init__(handle=handle, **kwargs)
         self._key_owner = key_owner
@@ -30,17 +32,17 @@ class _BaseAnyAddressableHeapHandle(_HandleWrapper, AddressableHeapHandle):
 
     @value.setter
     def value(self, v):
-        if v is None: 
-            raise ValueError('Value cannot be None')
+        if v is None:
+            raise ValueError("Value cannot be None")
 
         # Decrement value ref-count independently on whether the
-        # handle or the heap is the owner 
+        # handle or the heap is the owner
         self._dec_value_ref()
 
         backend.jheaps_AHeapHandle_set_value(self._handle, id(v))
 
         # Increment value ref-count independently on whether the
-        # handle or the heap is the owner 
+        # handle or the heap is the owner
         _inc_ref(v)
 
     def __del__(self):
@@ -49,19 +51,19 @@ class _BaseAnyAddressableHeapHandle(_HandleWrapper, AddressableHeapHandle):
         super().__del__()
 
     def _dec_value_ref(self):
-        """Decrement reference count on value.
-        """
+        """Decrement reference count on value."""
         value_id = backend.jheaps_AHeapHandle_get_value(self._handle)
         _dec_ref(_id_to_obj(value_id))
 
     def __repr__(self):
-        return "_BaseAnyAddressableHeapHandle(%r)" % self._handle
+        return "_BaseAnyValueAddressableHeapHandle(%r)" % self._handle
 
 
-class _DoubleAnyAddressableHeapHandle(_BaseAnyAddressableHeapHandle):
+class _DoubleAnyAddressableHeapHandle(_BaseAnyValueAddressableHeapHandle):
     """A handle on an element in a heap. This handle supports double keys
     and any hashable value.
     """
+
     def __init__(self, handle, value_owner=False, **kwargs):
         super().__init__(handle, False, value_owner, **kwargs)
 
@@ -81,10 +83,11 @@ class _DoubleAnyAddressableHeapHandle(_BaseAnyAddressableHeapHandle):
         return "_DoubleAnyAddressableHeapHandle(%r)" % self._handle
 
 
-class _LongAnyAddressableHeapHandle(_BaseAnyAddressableHeapHandle):
-    """A handle on an element in a heap. This handle supports long keys 
+class _LongAnyAddressableHeapHandle(_BaseAnyValueAddressableHeapHandle):
+    """A handle on an element in a heap. This handle supports long keys
     and any hashable value.
     """
+
     def __init__(self, handle, value_owner=False, **kwargs):
         super().__init__(handle, False, value_owner, **kwargs)
 
@@ -104,10 +107,53 @@ class _LongAnyAddressableHeapHandle(_BaseAnyAddressableHeapHandle):
         return "_LongAnyAddressableHeapHandle(%r)" % self._handle
 
 
-class _AnyAnyAddressableHeapHandle(_BaseAnyAddressableHeapHandle):
+class _AnyLongAddressableHeapHandle(_BaseLongValueAddressableHeapHandle):
+    """A handle on an element in a heap. This handle supports any hashable key
+    and long value.
+    """
+    def __init__(self, handle, key_owner=False, **kwargs):
+        super().__init__(handle, **kwargs)
+        self._key_owner = key_owner
+
+    @property
+    def key(self):
+        key_id = backend.jheaps_AHeapHandle_L_get_key(self._handle)
+        return _id_to_obj(key_id)
+
+    def delete(self):
+        backend.jheaps_AHeapHandle_delete(self._handle)
+        # Take ownership due to deletion from the heap
+        self._key_owner = True
+
+    def decrease_key(self, key):
+        old_key_id = backend.jheaps_AHeapHandle_L_get_key(self._handle)
+        backend.jheaps_AHeapHandle_L_decrease_key(self._handle, id(key))
+
+        if self._key_owner:
+            raise ValueError("Cannot be key owner to a valid handle")
+
+        _dec_ref_by_id(old_key_id)
+        _inc_ref(key)
+
+    def __del__(self):
+        if self._key_owner:
+            self._dec_key_ref()
+        super().__del__()
+
+    def _dec_key_ref(self):
+        """Decrement reference count on key."""
+        key_id = backend.jheaps_AHeapHandle_L_get_key(self._handle)
+        _dec_ref(_id_to_obj(key_id))
+
+    def __repr__(self):
+        return "_AnyLongAddressableHeapHandle(%r)" % self._handle
+
+
+class _AnyAnyAddressableHeapHandle(_BaseAnyValueAddressableHeapHandle):
     """A handle on an element in a heap. This handle supports any hashable key
     and any hashable value.
     """
+
     def __init__(self, handle, key_owner=False, value_owner=False, **kwargs):
         super().__init__(handle, key_owner, value_owner, **kwargs)
 
@@ -126,8 +172,8 @@ class _AnyAnyAddressableHeapHandle(_BaseAnyAddressableHeapHandle):
         old_key_id = backend.jheaps_AHeapHandle_L_get_key(self._handle)
         backend.jheaps_AHeapHandle_L_decrease_key(self._handle, id(key))
 
-        if self._key_owner: 
-            raise ValueError('Cannot be key owner to a valid handle')
+        if self._key_owner:
+            raise ValueError("Cannot be key owner to a valid handle")
 
         _dec_ref_by_id(old_key_id)
         _inc_ref(key)
@@ -138,8 +184,7 @@ class _AnyAnyAddressableHeapHandle(_BaseAnyAddressableHeapHandle):
         super().__del__()
 
     def _dec_key_ref(self):
-        """Decrement reference count on key.
-        """
+        """Decrement reference count on key."""
         key_id = backend.jheaps_AHeapHandle_L_get_key(self._handle)
         _dec_ref(_id_to_obj(key_id))
 
@@ -147,10 +192,11 @@ class _AnyAnyAddressableHeapHandle(_BaseAnyAddressableHeapHandle):
         return "_AnyAnyAddressableHeapHandle(%r)" % self._handle
 
 
-class _BaseAnyAddressableHeap(_HandleWrapper): 
+class _BaseAnyAddressableHeap(_HandleWrapper):
     """A Heap with any hashable values. All operations are delegated
     to the backend.
     """
+
     def __init__(self, handle, **kwargs):
         super().__init__(handle=handle, **kwargs)
 
@@ -161,20 +207,20 @@ class _BaseAnyAddressableHeap(_HandleWrapper):
         return backend.jheaps_AHeap_isempty(self._handle)
 
     def __repr__(self):
-        return "_BaseAnyHeap(%r)" % self._handle
+        return "_BaseAnyAddressableHeap(%r)" % self._handle
 
 
-
-class _DoubleAnyAddressableHeap(_BaseAnyAddressableHeap): 
+class _DoubleAnyAddressableHeap(_BaseAnyAddressableHeap):
     """A Heap with floating point keys and any hashable values. All operations are delegated
     to the backend.
     """
+
     def __init__(self, handle, **kwargs):
         super().__init__(handle=handle, **kwargs)
 
     def insert(self, key, value):
-        if value is None: 
-            raise ValueError('Value cannot be None')
+        if value is None:
+            raise ValueError("Value cannot be None")
         _inc_ref(value)
         res = backend.jheaps_AHeap_D_insert_key_value(self._handle, key, id(value))
         return _DoubleAnyAddressableHeapHandle(res)
@@ -190,7 +236,7 @@ class _DoubleAnyAddressableHeap(_BaseAnyAddressableHeap):
 
     def clear(self):
         # Clean one by one in order to decrease reference counts
-        while not self.is_empty(): 
+        while not self.is_empty():
             res = backend.jheaps_AHeap_delete_min(self._handle)
             value_id = backend.jheaps_AHeapHandle_get_value(res)
             _dec_ref_by_id(value_id)
@@ -200,16 +246,17 @@ class _DoubleAnyAddressableHeap(_BaseAnyAddressableHeap):
         return "_DoubleAnyAddressableHeap(%r)" % self._handle
 
 
-class _LongAnyAddressableHeap(_BaseAnyAddressableHeap): 
+class _LongAnyAddressableHeap(_BaseAnyAddressableHeap):
     """A Heap with long keys and any hashable values. All operations are delegated
     to the backend.
     """
+
     def __init__(self, handle, **kwargs):
         super().__init__(handle=handle, **kwargs)
 
     def insert(self, key, value):
-        if value is None: 
-            raise ValueError('Value cannot be None')
+        if value is None:
+            raise ValueError("Value cannot be None")
         _inc_ref(value)
         res = backend.jheaps_AHeap_L_insert_key_value(self._handle, key, id(value))
         return _LongAnyAddressableHeapHandle(res)
@@ -225,7 +272,7 @@ class _LongAnyAddressableHeap(_BaseAnyAddressableHeap):
 
     def clear(self):
         # Clean one by one in order to decrease reference counts
-        while not self.is_empty(): 
+        while not self.is_empty():
             res = backend.jheaps_AHeap_delete_min(self._handle)
             value_id = backend.jheaps_AHeapHandle_get_value(res)
             _dec_ref_by_id(value_id)
@@ -234,3 +281,77 @@ class _LongAnyAddressableHeap(_BaseAnyAddressableHeap):
     def __repr__(self):
         return "_LongAnyAddressableHeap(%r)" % self._handle
 
+
+class _AnyLongAddressableHeap(_BaseAnyAddressableHeap):
+    """A Heap with any hashable key and long value. All operations are delegated
+    to the backend.
+    """
+
+    def __init__(self, handle, comparator, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+        self._comparator = comparator
+
+    def insert(self, key, value):
+        _inc_ref(key)
+        res = backend.jheaps_AHeap_L_insert_key_value(self._handle, id(key), value)
+        return _AnyLongAddressableHeapHandle(res)
+
+    def find_min(self):
+        res = backend.jheaps_AHeap_find_min(self._handle)
+        return _AnyLongAddressableHeapHandle(res)
+
+    def delete_min(self):
+        res = backend.jheaps_AHeap_delete_min(self._handle)
+        # pass key ownership to handle
+        return _AnyLongAddressableHeapHandle(res, key_owner=True)
+
+    def clear(self):
+        # Clean one by one in order to decrease reference counts
+        while not self.is_empty():
+            res = backend.jheaps_AHeap_delete_min(self._handle)
+            key_id = backend.jheaps_AHeapHandle_L_get_key(res)
+            _dec_ref_by_id(key_id)
+            backend.jheaps_handles_destroy(res)
+
+    def __repr__(self):
+        return "_AnyLongAddressableHeap(%r)" % self._handle
+
+
+class _AnyAnyAddressableHeap(_BaseAnyAddressableHeap):
+    """A Heap with any hashable key and any hashable value. All operations are delegated
+    to the backend.
+    """
+
+    def __init__(self, handle, comparator, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+        self._comparator = comparator
+
+    def insert(self, key, value):
+        if value is None:
+            raise ValueError("Value cannot be None")
+        _inc_ref(key)
+        _inc_ref(value)
+        res = backend.jheaps_AHeap_L_insert_key_value(self._handle, id(key), id(value))
+        return _AnyAnyAddressableHeapHandle(res)
+
+    def find_min(self):
+        res = backend.jheaps_AHeap_find_min(self._handle)
+        return _AnyAnyAddressableHeapHandle(res)
+
+    def delete_min(self):
+        res = backend.jheaps_AHeap_delete_min(self._handle)
+        # pass key and value ownership to handle
+        return _AnyAnyAddressableHeapHandle(res, key_owner=True, value_owner=True)
+
+    def clear(self):
+        # Clean one by one in order to decrease reference counts
+        while not self.is_empty():
+            res = backend.jheaps_AHeap_delete_min(self._handle)
+            key_id = backend.jheaps_AHeapHandle_L_get_key(res)
+            value_id = backend.jheaps_AHeapHandle_get_value(res)
+            _dec_ref_by_id(key_id)
+            _dec_ref_by_id(value_id)
+            backend.jheaps_handles_destroy(res)
+
+    def __repr__(self):
+        return "_AnyAnyAddressableHeap(%r)" % self._handle

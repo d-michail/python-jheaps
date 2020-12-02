@@ -6,7 +6,7 @@ from ..types import (
 from ._wrappers import _HandleWrapper
 
 
-class _BaseLongAddressableHeapHandle(_HandleWrapper, AddressableHeapHandle):
+class _BaseLongValueAddressableHeapHandle(_HandleWrapper, AddressableHeapHandle):
     """A handle on an element in a heap. This handle supports long integer values.
     """
     def __init__(self, handle, **kwargs):
@@ -24,10 +24,10 @@ class _BaseLongAddressableHeapHandle(_HandleWrapper, AddressableHeapHandle):
         backend.jheaps_AHeapHandle_delete(self._handle)
 
     def __repr__(self):
-        return "_BaseAddressableHeapHandle(%r)" % self._handle
+        return "_BaseLongValueAddressableHeapHandle(%r)" % self._handle
 
 
-class _DoubleLongAddressableHeapHandle(_BaseLongAddressableHeapHandle):
+class _DoubleLongAddressableHeapHandle(_BaseLongValueAddressableHeapHandle):
     """A handle on an element in a heap. This handle supports double keys
     and long integer values.
     """
@@ -45,7 +45,7 @@ class _DoubleLongAddressableHeapHandle(_BaseLongAddressableHeapHandle):
         return "_DoubleLongAddressableHeapHandle(%r)" % self._handle
 
 
-class _LongLongAddressableHeapHandle(_BaseLongAddressableHeapHandle):
+class _LongLongAddressableHeapHandle(_BaseLongValueAddressableHeapHandle):
     """A handle on an element in a heap. This handle supports long keys 
     and long integer values.
     """
