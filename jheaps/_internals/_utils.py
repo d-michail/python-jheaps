@@ -52,7 +52,7 @@ def _id_comparator(a_id, b_id):
 
     if a.__lt__(b): 
         return -1
-    if a.__eq(b): 
+    if a.__eq__(b): 
         return 0
     return 1
 

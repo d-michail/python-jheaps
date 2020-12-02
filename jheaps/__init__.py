@@ -70,7 +70,7 @@ def create_binary(key_type=float, value_type=int, explicit=False, addressable=Fa
     :type key_type: int or float    
     :param explicit: if true explicit, otherwise implicit (array-based)
     :param addressable: if true addressable, otherwise not. Only valid for implicit
-        since explicit are by default addressable
+        since explicit are by default addressable.
     """
     if explicit:
         heap_type = _HeapType.HEAP_TYPE_ADDRESSABLE_BINARY_EXPLICIT

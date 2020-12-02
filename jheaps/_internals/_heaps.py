@@ -1,6 +1,11 @@
 from .. import backend
 from ._wrappers import _HandleWrapper
 
+from ._utils import (
+    _inc_ref,
+    _dec_ref_by_id,
+    _id_to_obj,
+)
 
 class _BaseHeap(_HandleWrapper): 
     """A Heap. All operations are delegated to the backend.
@@ -57,4 +62,34 @@ class _LongHeap(_BaseHeap):
 
     def __repr__(self):
         return "_LongHeap(%r)" % self._handle
+
+
+class _AnyHeap(_BaseHeap): 
+    """A Heap with any hashable keys. All operations are delegated to the backend.
+    """
+    def __init__(self, handle, comparator, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+        self._comparator=comparator
+
+    def insert(self, key):
+        _inc_ref(key)
+        backend.jheaps_Heap_L_insert_key(self._handle, id(key))
+
+    def find_min(self):
+        key_id = backend.jheaps_Heap_L_find_min(self._handle)
+        return _id_to_obj(key_id)
+
+    def delete_min(self):
+        key_id = backend.jheaps_Heap_L_delete_min(self._handle)
+        _dec_ref_by_id(key_id)
+        return _id_to_obj(key_id)
+
+    def clear(self):
+        # Clean one by one in order to decrease reference counts
+        while not self.is_empty():
+            key_id = backend.jheaps_Heap_L_delete_min(self._handle)
+            _dec_ref_by_id(key_id)
+
+    def __repr__(self):
+        return "_AnyHeap(%r)" % self._handle
 

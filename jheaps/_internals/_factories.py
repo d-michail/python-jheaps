@@ -7,6 +7,7 @@ from ..types import (
 from ._heaps import (
     _DoubleHeap,
     _LongHeap,
+    _AnyHeap,
 )
 
 from ._addressable_heaps import (
@@ -31,13 +32,16 @@ def _create_heap(key_type, type: _HeapType):
 
     :returns: a heap
     """
-    handle = backend.jheaps_heap_create(type.value)
     if key_type == float: 
+        handle = backend.jheaps_heap_create(type.value)
         return _DoubleHeap(handle)
     elif key_type == int:
+        handle = backend.jheaps_heap_create(type.value)
         return _LongHeap(handle)
-    
-    raise ValueError("Invalid key type")
+    else:
+        f_ptr, f = _create_wrapped_id_comparator_callback(_id_comparator)
+        handle = backend.jheaps_heap_comparator_create(type.value, f_ptr)
+        return _AnyHeap(handle, comparator=f)
 
 
 def _create_addressable_heap(type: _HeapType, key_type=float, value_type=int):
@@ -45,13 +49,14 @@ def _create_addressable_heap(type: _HeapType, key_type=float, value_type=int):
 
     :returns: a heap
     """
-    handle = backend.jheaps_heap_create(type.value)
     if key_type == float:
+        handle = backend.jheaps_heap_create(type.value)
         if value_type == int: 
             return _DoubleLongAddressableHeap(handle)
         else:
             return _DoubleAnyAddressableHeap(handle)
     elif key_type == int:
+        handle = backend.jheaps_heap_create(type.value)
         if value_type == int:
             return _LongLongAddressableHeap(handle)
         else:
