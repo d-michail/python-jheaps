@@ -7,7 +7,7 @@ from jheaps import (
     create_addressable_binary_heap
 )
 
-def test_double_heap_implicit(): 
+def test_double_binary_heap_implicit(): 
 
     h = create_implicit_binary_heap(key_type=float)
 
@@ -29,7 +29,7 @@ def test_double_heap_implicit():
     assert len(h) == 0
 
 
-def test_long_heap_implicit(): 
+def test_long_binary_heap_implicit(): 
 
     h = create_implicit_binary_heap(key_type=int)
 
@@ -51,7 +51,7 @@ def test_long_heap_implicit():
     assert len(h) == 0
 
 
-def test_double_addressable_heap_explicit(): 
+def test_double_addressable_binary_heap_explicit(): 
 
     h = create_addressable_binary_heap(explicit=True, key_type=float, value_type=int)
 
@@ -91,7 +91,7 @@ def test_double_addressable_heap_explicit():
     assert len(h) == 0
 
 
-def test_double_addressable_heap_implicit(): 
+def test_double_addressable_binary_heap_implicit(): 
 
     h = create_addressable_binary_heap(explicit=False, key_type=float, value_type=int)
 
@@ -131,7 +131,7 @@ def test_double_addressable_heap_implicit():
     assert len(h) == 0
 
 
-def test_sort_with_heap():
+def test_sort_with_double_addressable_binary_heap():
     rng = Random(17)
 
     numbers = []
