@@ -52,6 +52,19 @@ from ._internals._factories import (
 
 
 def create_addressable_dary_heap(key_type=float, value_type=int, d=4, explicit=False):
+    """Create an addressable d-ary heap.
+
+    :param key_type: the key type
+    :type key_type: float, int or object
+    :param value_type: the value type
+    :type value_type: float, int or object
+    :param d: the degree of the d-ary heap
+    :type d: int
+    :param explicit: if True the heap is an actual tree, otherwise is it stored as an array
+    :type explicit: boolean
+    :returns: the heap
+    :rtype: :py:class:`.AddressableHeap`
+    """
     if explicit:
         heap_type = _HeapType.HEAP_TYPE_ADDRESSABLE_DARY_IMPLICIT
     else:
@@ -67,6 +80,15 @@ def create_addressable_dary_heap(key_type=float, value_type=int, d=4, explicit=F
 
 
 def create_implicit_dary_heap(key_type=float, d=4):
+    """Create an implicit (array-based) d-ary heap.
+
+    :param key_type: the key type
+    :type key_type: float, int or object
+    :param d: the degree of the d-ary heap
+    :type d: int
+    :returns: the heap
+    :rtype: :py:class:`.Heap`
+    """    
     heap_type = _HeapType.HEAP_TYPE_DARY_IMPLICIT
 
     return _create_and_wrap_dary_heap(
@@ -79,6 +101,15 @@ def create_implicit_dary_heap(key_type=float, d=4):
 
 
 def create_implicit_weak_binary_heap(key_type=float, bulk_insert=False):
+    """Create an implicit (array-based) weak binary heap.
+
+    :param key_type: the key type
+    :type key_type: float, int or object
+    :param bulk_insert: whether to use the variant which supports bulk insertion
+    :type bulk_insert: boolean
+    :returns: the heap
+    :rtype: :py:class:`.Heap`
+    """    
     if bulk_insert:
         heap_type = _HeapType.HEAP_TYPE_BINARY_IMPLICIT_WEAK_BULKINSERT
     else:
@@ -93,10 +124,12 @@ def create_implicit_weak_binary_heap(key_type=float, bulk_insert=False):
 
 
 def create_implicit_binary_heap(key_type=float):
-    """Create a binary heap.
+    """Create an implicit (array-based) binary heap.
 
     :param key_type: the key type
-    :type key_type: int or float
+    :type key_type: float, int or object
+    :returns: the heap
+    :rtype: :py:class:`.Heap`
     """
     heap_type = _HeapType.HEAP_TYPE_BINARY_IMPLICIT
 
@@ -109,12 +142,17 @@ def create_implicit_binary_heap(key_type=float):
 
 
 def create_addressable_binary_heap(key_type=float, value_type=int, explicit=False):
-    """Create a binary heap.
+    """Create an addressable binary heap.
 
     :param key_type: the key type
-    :type key_type: int or float
-    :param explicit: if true explicit, otherwise implicit (array-based)
-    """
+    :type key_type: float, int or object
+    :param value_type: the value type
+    :type value_type: float, int or object
+    :param explicit: if True the heap is an actual tree, otherwise is it stored as an array
+    :type explicit: boolean
+    :returns: the heap
+    :rtype: :py:class:`.AddressableHeap`
+    """    
     if explicit:
         heap_type = _HeapType.HEAP_TYPE_ADDRESSABLE_BINARY_EXPLICIT
     else:
@@ -174,7 +212,11 @@ def create_addressable_hollow_heap(key_type=float, value_type=int):
     """Create an addressable hollow heap.
 
     :param key_type: the key type
-    :type key_type: int, float or object
+    :type key_type: float, int or object
+    :param value_type: the value type
+    :type value_type: float, int or object
+    :returns: the heap
+    :rtype: :py:class:`.AddressableHeap`
     """
     heap_type = _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_HOLLOW
 
@@ -187,6 +229,15 @@ def create_addressable_hollow_heap(key_type=float, value_type=int):
 
 
 def create_addressable_leftist_heap(key_type=float, value_type=int):
+    """Create an addressable leftist heap.
+
+    :param key_type: the key type
+    :type key_type: float, int or object
+    :param value_type: the value type
+    :type value_type: float, int or object
+    :returns: the heap
+    :rtype: :py:class:`.AddressableHeap`
+    """    
     heap_type = _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_LEFTIST
 
     return _create_and_wrap_heap(
@@ -198,6 +249,15 @@ def create_addressable_leftist_heap(key_type=float, value_type=int):
 
 
 def create_addressable_skew_heap(key_type=float, value_type=int):
+    """Create an addressable skew heap.
+
+    :param key_type: the key type
+    :type key_type: float, int or object
+    :param value_type: the value type
+    :type value_type: float, int or object
+    :returns: the heap
+    :rtype: :py:class:`.AddressableHeap`
+    """
     heap_type = _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_SKEW
 
     return _create_and_wrap_heap(
@@ -209,6 +269,21 @@ def create_addressable_skew_heap(key_type=float, value_type=int):
 
 
 def create_addressable_radix_heap(key_type=float, value_type=int, min=None, max=None):
+    """Create an addressable radix heap. Radix heaps are monotone heaps 
+    stored using buckets. The key type can only be float or int. The number of 
+    buckets depends on the difference between the min and max values provided.
+
+    :param key_type: the key type
+    :type key_type: float or int
+    :param value_type: the value type
+    :type value_type: float, int or object
+    :param min: minimum key value
+    :type min: float or int depending on key_type
+    :param max: maximum key value
+    :type max: float or int depending on key_type    
+    :returns: the heap
+    :rtype: :py:class:`.AddressableHeap`
+    """    
     if key_type == float:
         heap_type = _HeapType.HEAP_TYPE_MONOTONE_ADDRESSABLE_DOUBLE_RADIX
     elif key_type == int:
@@ -235,6 +310,21 @@ def create_addressable_radix_heap(key_type=float, value_type=int, min=None, max=
 
 
 def create_radix_heap(key_type=float, min=None, max=None):
+    """Create a radix heap. Radix heaps are monotone heaps 
+    stored using buckets. The key type can only be float or int. The number of 
+    buckets depends on the difference between the min and max values provided.
+
+    :param key_type: the key type
+    :type key_type: float or int
+    :param value_type: the value type
+    :type value_type: float, int or object
+    :param min: minimum key value
+    :type min: float or int depending on key_type
+    :param max: maximum key value
+    :type max: float or int depending on key_type    
+    :returns: the heap
+    :rtype: :py:class:`.Heap`
+    """    
     if key_type == float:
         heap_type = _HeapType.HEAP_TYPE_MONOTONE_DOUBLE_RADIX
     elif key_type == int:

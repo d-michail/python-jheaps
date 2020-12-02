@@ -6,16 +6,45 @@ Heap Factories
 
 .. currentmodule:: jheaps
 
-Creating heaps can be accomplished using factory methods.
+Creating heaps can be accomplished using factory methods. Heaps are based on two main 
+categories depending on whether they are addressable or not. Addressable heaps follow the
+:py:class:`.AddressableHeap` interface and support the addition of key-value pairs 
+while classic heaps use the :py:class:`.Heap` interface and support only keys.
+
+Both keys and values (when applicable) can have different types. Native support and therefore 
+better performance is provided for `float` and `int` keys or values. All other types are 
+represented using `object` and thus entail additional overhead. When keys are objects, comparisons 
+are performed using `__lt__` and `__eq__`.
 
 AddressableHeaps
 ^^^^^^^^^^^^^^^^
 
-The main factory function which creates addressable heaps is :py:meth:`jheaps.create_heap`. 
 Depending on the given parameters different types of heaps can be represented. All heaps
-returned by this function are instances of :py:class:`jheaps.types.AddressableHeap`.
-Most users should create graphs using this function:
+returned by the following functions are instances of :py:class:`.AddressableHeap`.
 
-.. autofunction:: jheaps.create_heap
+.. autofunction:: jheaps.create_addressable_dary_heap
 
+.. autofunction:: jheaps.create_addressable_binary_heap
+
+.. autofunction:: jheaps.create_addressable_fibonacci_heap
+
+.. autofunction:: jheaps.create_addressable_pairing_heap
+
+.. autofunction:: jheaps.create_addressable_hollow_heap
+
+.. autofunction:: create_addressable_radix_heap
+
+Heaps
+^^^^^
+
+Depending on the given parameters different types of heaps can be represented. All heaps
+returned by the following functions are instances of :py:class:`.Heap`.
+
+.. autofunction:: jheaps.create_implicit_dary_heap
+
+.. autofunction:: jheaps.create_implicit_weak_binary_heap
+
+.. autofunction:: jheaps.create_implicit_binary_heap
+
+.. autofunction:: jheaps.create_radix_heap
 

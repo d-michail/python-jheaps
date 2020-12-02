@@ -13,9 +13,9 @@ In this example we create a pairing heap.
 import jheaps
 
 # %%
-# We create a heap
+# We create a pairing heap.
 
-heap = jheaps.create_heap()
+heap = jheaps.create_addressable_pairing_heap()
 
 print(heap)
 
