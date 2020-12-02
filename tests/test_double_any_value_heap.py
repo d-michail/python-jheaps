@@ -3,13 +3,13 @@ import pytest
 from random import Random
 
 from jheaps import (
-    create_pairing
+    create_addressable_pairing_heap
 )
 
 
 def test_double_any_value_heap(): 
 
-    h = create_pairing(key_type=float, value_type=object)
+    h = create_addressable_pairing_heap(key_type=float, value_type=object)
 
     h1 = h.insert(5.5, "15")
     assert h1.key == 5.5

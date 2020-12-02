@@ -45,46 +45,52 @@ from ._internals._factories import (
 )
 
 
-def create_dary(key_type=float, value_type=int, d=4, explicit=False):
-    if explicit: 
+def create_addressable_dary_heap(key_type=float, value_type=int, d=4, explicit=False):
+    if explicit:
         heap_type = _HeapType.HEAP_TYPE_ADDRESSABLE_DARY_IMPLICIT
-    else: 
+    else:
         heap_type = _HeapType.HEAP_TYPE_ADDRESSABLE_DARY_IMPLICIT
-    
+
     return _create_addressable_heap(heap_type, key_type, value_type)
 
 
-def create_weak_binary(key_type=float, bulk_insert=False):
+def create_weak_binary_heap(key_type=float, bulk_insert=False):
     if bulk_insert:
         heap_type = _HeapType.HEAP_TYPE_BINARY_IMPLICIT_WEAK_BULKINSERT
     else:
         heap_type = _HeapType.HEAP_TYPE_BINARY_IMPLICIT_WEAK
-    
+
     return _create_heap(key_type, heap_type)
 
 
-def create_binary(key_type=float, value_type=int, explicit=False, addressable=False):
-    """Create a binary heap. 
+def create_implicit_binary_heap(key_type=float):
+    """Create a binary heap.
 
     :param key_type: the key type
-    :type key_type: int or float    
+    :type key_type: int or float
+    """
+    heap_type = _HeapType.HEAP_TYPE_BINARY_IMPLICIT
+    return _create_heap(key_type, heap_type)
+
+
+def create_addressable_binary_heap(key_type=float, value_type=int, explicit=False):
+    """Create a binary heap.
+
+    :param key_type: the key type
+    :type key_type: int or float
     :param explicit: if true explicit, otherwise implicit (array-based)
-    :param addressable: if true addressable, otherwise not. Only valid for implicit
-        since explicit are by default addressable.
     """
     if explicit:
         heap_type = _HeapType.HEAP_TYPE_ADDRESSABLE_BINARY_EXPLICIT
-        return _create_addressable_heap(heap_type, key_type, value_type)
-    else: 
-        if addressable: 
-            heap_type = _HeapType.HEAP_TYPE_ADDRESSABLE_BINARY_IMPLICIT
-            return _create_addressable_heap(heap_type, key_type, value_type)
-        else:
-            heap_type = _HeapType.HEAP_TYPE_BINARY_IMPLICIT
-            return _create_heap(key_type, heap_type)
+    else:
+        heap_type = _HeapType.HEAP_TYPE_ADDRESSABLE_BINARY_IMPLICIT
+
+    return _create_addressable_heap(heap_type, key_type, value_type)
 
 
-def create_fibonacci(key_type=float, value_type=int, simple=False, double_ended=False):
+def create_addressable_fibonacci_heap(
+    key_type=float, value_type=int, simple=False, double_ended=False
+):
     if simple:
         heap_type = _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_FIBONACCI_SIMPLE
     elif double_ended:
@@ -97,7 +103,9 @@ def create_fibonacci(key_type=float, value_type=int, simple=False, double_ended=
     return _create_addressable_heap(heap_type, key_type, value_type)
 
 
-def create_pairing(key_type=float, value_type=int, rank=False, costless_meld=False, double_ended=False):
+def create_addressable_pairing_heap(
+    key_type=float, value_type=int, rank=False, costless_meld=False, double_ended=False
+):
     if rank:
         heap_type = _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_PAIRING_RANK
     elif costless_meld:
@@ -112,36 +120,46 @@ def create_pairing(key_type=float, value_type=int, rank=False, costless_meld=Fal
     return _create_addressable_heap(heap_type, key_type, value_type)
 
 
-def create_hollow(key_type=float, value_type=int):
-    """Create a hollow heap.
+def create_addressable_hollow_heap(key_type=float, value_type=int):
+    """Create an addressable hollow heap.
 
     :param key_type: the key type
-    :type key_type: int or float
+    :type key_type: int, float or object
     """
-    return _create_addressable_heap(_HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_HOLLOW, key_type, value_type)
+    return _create_addressable_heap(
+        _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_HOLLOW, key_type, value_type
+    )
 
 
-def create_leftist(key_type=float, value_type=int):
-    return _create_addressable_heap(_HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_LEFTIST, key_type, value_type)
+def create_addressable_leftist_heap(key_type=float, value_type=int):
+    return _create_addressable_heap(
+        _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_LEFTIST, key_type, value_type
+    )
 
 
-def create_skew(key_type=float, value_type=int):
-    return _create_addressable_heap(_HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_SKEW, key_type, value_type)    
+def create_addressable_skew_heap(key_type=float, value_type=int):
+    return _create_addressable_heap(
+        _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_SKEW, key_type, value_type
+    )
 
 
-def create_radix(key_type=float, value_type=int, addressable=False):
-    if addressable: 
-        if key_type == float: 
-            heap_type = _HeapType.HEAP_TYPE_MONOTONE_ADDRESSABLE_DOUBLE_RADIX
-        elif key_type == int:
-            heap_type = _HeapType.HEAP_TYPE_MONOTONE_ADDRESSABLE_LONG_RADIX
+def create_addressable_radix_heap(key_type=float, value_type=int):
+    if key_type == float:
+        heap_type = _HeapType.HEAP_TYPE_MONOTONE_ADDRESSABLE_DOUBLE_RADIX
+    elif key_type == int:
+        heap_type = _HeapType.HEAP_TYPE_MONOTONE_ADDRESSABLE_LONG_RADIX
     else:
-        if key_type == float: 
-            heap_type = _HeapType.HEAP_TYPE_MONOTONE_DOUBLE_RADIX
-        elif key_type == int:
-            heap_type = _HeapType.HEAP_TYPE_MONOTONE_LONG_RADIX
+        raise ValueError("Radix heaps support float or int keys")
 
-    if addressable:
-        return _create_addressable_heap(heap_type, key_type, value_type)
-    else:
-        return _create_heap(key_type, heap_type)
+    # TODO: fixme here (min, max)
+    return _create_addressable_heap(heap_type, key_type, value_type)
+
+
+def create_radix_heap(key_type=float):
+    if key_type == float:
+        heap_type = _HeapType.HEAP_TYPE_MONOTONE_DOUBLE_RADIX
+    elif key_type == int:
+        heap_type = _HeapType.HEAP_TYPE_MONOTONE_LONG_RADIX
+
+    # TODO: fixme here (min, max)
+    return _create_heap(key_type, heap_type)

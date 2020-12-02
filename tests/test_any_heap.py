@@ -3,7 +3,7 @@ import pytest
 from random import Random
 
 from jheaps import (
-    create_binary
+    create_implicit_binary_heap
 )
 
 class MyKey():
@@ -24,7 +24,7 @@ class MyKey():
 def test_any_heap(): 
 
     # Create an implicit non-addressable heap
-    h = create_binary(key_type=object, explicit=False, addressable=False)
+    h = create_implicit_binary_heap(key_type=object)
 
     h.insert(MyKey(5.5))
 

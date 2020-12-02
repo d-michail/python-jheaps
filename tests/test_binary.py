@@ -3,12 +3,13 @@ import pytest
 from random import Random
 
 from jheaps import (
-    create_binary
+    create_implicit_binary_heap,
+    create_addressable_binary_heap
 )
 
 def test_double_heap_implicit(): 
 
-    h = create_binary(addressable=False, explicit=False)
+    h = create_implicit_binary_heap(key_type=float)
 
     h.insert(5.5)
     h.insert(6.5)
@@ -30,7 +31,7 @@ def test_double_heap_implicit():
 
 def test_long_heap_implicit(): 
 
-    h = create_binary(key_type=int, addressable=False, explicit=False)
+    h = create_implicit_binary_heap(key_type=int)
 
     h.insert(5)
     h.insert(6)
@@ -50,9 +51,9 @@ def test_long_heap_implicit():
     assert len(h) == 0
 
 
-def test_double_heap_explicit(): 
+def test_double_addressable_heap_explicit(): 
 
-    h = create_binary(addressable=False, explicit=True)
+    h = create_addressable_binary_heap(explicit=True, key_type=float, value_type=int)
 
     h1 = h.insert(5.5, 15)
     assert h1.key == 5.5
@@ -92,7 +93,7 @@ def test_double_heap_explicit():
 
 def test_double_addressable_heap_implicit(): 
 
-    h = create_binary(addressable=True)
+    h = create_addressable_binary_heap(explicit=False, key_type=float, value_type=int)
 
     h1 = h.insert(5.5, 15)
     assert h1.key == 5.5
@@ -137,7 +138,7 @@ def test_sort_with_heap():
     for i in range(10000):
         numbers.append(rng.random())
 
-    heap = create_binary(addressable=True)
+    heap = create_addressable_binary_heap(explicit=True, key_type=float, value_type=int)
     for n in numbers: 
         heap.insert(n)
 

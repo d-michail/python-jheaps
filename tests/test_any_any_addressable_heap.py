@@ -3,7 +3,7 @@ import pytest
 from random import Random
 
 from jheaps import (
-    create_pairing
+    create_addressable_pairing_heap
 )
 
 class MyKey():
@@ -33,7 +33,7 @@ class MyValue():
 
 def test_any_any_addressable_heap(): 
 
-    h = create_pairing(key_type=object, value_type=object)
+    h = create_addressable_pairing_heap(key_type=object, value_type=object)
 
     h1 = h.insert(MyKey(5.5), MyValue(15))
     assert h1.key == MyKey(5.5)

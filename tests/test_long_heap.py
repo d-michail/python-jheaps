@@ -3,13 +3,13 @@ import pytest
 from random import Random
 
 from jheaps import (
-    create_pairing
+    create_addressable_pairing_heap
 )
 
 
 def test_long_heap(): 
 
-    h = create_pairing(key_type=int)
+    h = create_addressable_pairing_heap(key_type=int)
 
     h1 = h.insert(5, 15)
     assert h1.key == 5
@@ -54,7 +54,7 @@ def test_sort_with_heap():
     for i in range(10000):
         numbers.append(rng.randint(0,1000))
 
-    heap = create_pairing(key_type=int)
+    heap = create_addressable_pairing_heap(key_type=int)
     for n in numbers: 
         heap.insert(n)
 
