@@ -5,7 +5,7 @@ Tutorials
 
 .. currentmodule:: jheaps
 
-The different tutorials help you start using the basic heaps implementations that 
+The different tutorials help you start using the heap implementations that 
 the |Bindings| provide.
 
 .. toctree::

@@ -171,17 +171,65 @@ def create_addressable_binary_heap(key_type=float, value_type=int, explicit=Fals
     )
 
 
+def create_doubleended_addressable_fibonacci_heap(key_type=float, value_type=int):
+    """Create a double-ended Fibonacci heap using the reflected heaps technique.
+
+    :param key_type: the key type
+    :type key_type: float, int or object
+    :param value_type: the value type
+    :type value_type: float, int or object
+    :returns: the heap
+    :rtype: :py:class:`.AddressableHeap`
+    """
+    heap_type = (
+        _HeapType.HEAP_TYPE_DOUBLEENDED_MERGEABLE_ADDRESSABLE_FIBONACCI_REFLECTED
+    )
+
+    return _create_and_wrap_heap(
+        heap_type,
+        key_type,
+        value_type,
+        addressable=True,
+        mergeable=True,
+    )
+    pass
+
+
 def create_addressable_fibonacci_heap(
-    key_type=float, value_type=int, simple=False, double_ended=False
+    key_type=float,
+    value_type=int,
+    simple=False,
 ):
-    if simple:
-        heap_type = _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_FIBONACCI_SIMPLE
-    elif double_ended:
-        heap_type = (
-            _HeapType.HEAP_TYPE_DOUBLEENDED_MERGEABLE_ADDRESSABLE_FIBONACCI_REFLECTED
-        )
-    else:
-        heap_type = _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_FIBONACCI
+    """Create an addressable Fibonacci heap.
+
+    :param key_type: the key type
+    :type key_type: float, int or object
+    :param value_type: the value type
+    :type value_type: float, int or object
+    :param simple: if true then the simple variant is returned, otherwise the classic
+    :type simple: boolean
+    :returns: the heap
+    :rtype: :py:class:`.AddressableHeap`
+    """
+    heap_type = (
+        _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_FIBONACCI_SIMPLE
+        if simple
+        else _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_FIBONACCI
+    )
+
+    return _create_and_wrap_heap(
+        heap_type,
+        key_type,
+        value_type,
+        addressable=True,
+        mergeable=True,
+    )
+
+
+def create_doubleended_addressable_pairing_heap(
+    key_type=float, value_type=int, 
+):
+    heap_type = _HeapType.HEAP_TYPE_DOUBLEENDED_MERGEABLE_ADDRESSABLE_PAIRING_REFLECTED
 
     return _create_and_wrap_heap(
         heap_type,
@@ -193,16 +241,12 @@ def create_addressable_fibonacci_heap(
 
 
 def create_addressable_pairing_heap(
-    key_type=float, value_type=int, rank=False, costless_meld=False, double_ended=False
+    key_type=float, value_type=int, rank=False, costless_meld=False
 ):
     if rank:
         heap_type = _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_PAIRING_RANK
     elif costless_meld:
         heap_type = _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_PAIRING_COSTLESSMELD
-    elif double_ended:
-        heap_type = (
-            _HeapType.HEAP_TYPE_DOUBLEENDED_MERGEABLE_ADDRESSABLE_PAIRING_REFLECTED
-        )
     else:
         heap_type = _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_PAIRING
 

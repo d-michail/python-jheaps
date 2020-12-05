@@ -8,13 +8,10 @@ The JHeaps library
 
 Release v\ |version|.
 
-Python bindings for the `JHeaps library <https://jheaps.org/>`_.
+Python bindings for the `JHeaps library <https://www.jheaps.org/>`_.
 
-The JHeaps library is a highly efficient library, containing state-of-the-art heap 
-implementations. 
-
-The |Bindings| is a pure python/native package having no dependency on the JVM. During the
-build process the backend JHeaps library is compiled as a shared library and bundled
+The JHeaps library is a highly efficient Java library, containing state-of-the-art heap 
+implementations. The |Bindings| is a pure python/native package having no dependency on the JVM. During the build process the backend JHeaps library is compiled as a shared library and bundled
 inside the python package.
 
 Backend version v\ |BackendVersion|.

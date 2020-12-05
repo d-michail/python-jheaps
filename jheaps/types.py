@@ -93,7 +93,7 @@ class AddressableHeap(ABC):
         pass
 
     @abstractmethod
-    def insert(self, key, value=0):
+    def insert(self, key, value):
         """Insert a new element.
 
         :param key: the key
@@ -101,6 +101,71 @@ class AddressableHeap(ABC):
         :type value: long integer
         :returns: a handle for the new element
         :rtype: :class:`.AddressableHeapHandle`
+        """
+        pass
+
+
+class DoubleEndedAddressableHeapHandle(AddressableHeapHandle):
+    """Interface for a double ended addressable heap handle."""
+
+    @abstractmethod
+    def increase_key(self, key):
+        """Increase the key of the element represented by
+        this handle.
+
+        :param key: the new key
+        """
+        pass
+
+
+class DoubleEndedAddressableHeap(AddressableHeap):
+    """Interface for an double ended addressable heap."""
+    
+    @abstractmethod
+    def find_min(self):
+        """Return a handle for the minimum element.
+
+        :rtype: :py:class:`.DoubleEndedAddressableHeapHandle`
+        """
+        pass
+
+    @abstractmethod
+    def delete_min(self):
+        """Delete the minimum element and return a
+        handle. The handle can be used to access the key
+        or value but not to perform any other operation.
+
+        :rtype: :class:`.DoubleEndedAddressableHeapHandle`
+        """
+        pass
+
+    @abstractmethod
+    def insert(self, key, value):
+        """Insert a new element.
+
+        :param key: the key
+        :param value: the value
+        :type value: long integer
+        :returns: a handle for the new element
+        :rtype: :class:`.DoubleEndedAddressableHeapHandle`
+        """
+        pass
+
+    @abstractmethod
+    def find_max(self):
+        """Return a handle for the maximum element.
+
+        :rtype: :class:`.DoubleEndedAddressableHeapHandle`
+        """
+        pass
+
+    @abstractmethod
+    def delete_max(self):
+        """Delete the minimum element and return a
+        handle. The handle can be used to access the key
+        or value but not to perform any other operation.
+
+        :rtype: :class:`.DoubledEndedAddressableHeapHandle`
         """
         pass
 
@@ -158,4 +223,18 @@ class Heap(ABC):
 
         :param key: the key
         """
+        pass
+
+
+class DoubleEndedHeap(Heap):
+    """Interface for a double ended heap."""
+
+    @abstractmethod
+    def find_max(self):
+        """Return the maximum key."""
+        pass
+
+    @abstractmethod
+    def delete_max(self):
+        """Delete the maximum element and return its key."""
         pass

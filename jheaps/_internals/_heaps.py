@@ -1,4 +1,9 @@
 from .. import backend
+
+from ..types import (
+    Heap, 
+    DoubleEndedHeap,
+)
 from ._wrappers import _HandleWrapper
 
 from ._utils import (
@@ -7,7 +12,7 @@ from ._utils import (
     _id_to_obj,
 )
 
-class _BaseHeap(_HandleWrapper): 
+class _BaseHeap(_HandleWrapper, Heap): 
     """A Heap. All operations are delegated to the backend.
     """
     def __init__(self, handle, **kwargs):
