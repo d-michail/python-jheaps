@@ -142,5 +142,4 @@ SPDX-License-Identifier: Apache-2.0
 
 (C) Copyright 2020, by Dimitrios Michail
 
-
 Enjoy!
