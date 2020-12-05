@@ -50,7 +50,7 @@ class _DoubleLongAddressableHeapHandle(_BaseLongValueAddressableHeapHandle):
 
 
 class _DoubleEndedDoubleLongAddressableHeapHandle(
-    _BaseLongValueAddressableHeapHandle, DoubleEndedAddressableHeapHandle
+    _DoubleLongAddressableHeapHandle, DoubleEndedAddressableHeapHandle
 ):
     """A double ended handle on an element in a heap. This handle supports double keys
     and long integer values.
@@ -58,13 +58,6 @@ class _DoubleEndedDoubleLongAddressableHeapHandle(
 
     def __init__(self, handle, **kwargs):
         super().__init__(handle=handle, **kwargs)
-
-    @property
-    def key(self):
-        return backend.jheaps_AHeapHandle_D_get_key(self._handle)
-
-    def decrease_key(self, key):
-        backend.jheaps_AHeapHandle_D_decrease_key(self._handle, key)
 
     def increase_key(self, key):
         backend.jheaps_DEAHeapHandle_D_increase_key(self._handle, key)
@@ -93,7 +86,7 @@ class _LongLongAddressableHeapHandle(_BaseLongValueAddressableHeapHandle):
 
 
 class _DoubleEndedLongLongAddressableHeapHandle(
-    _BaseLongValueAddressableHeapHandle, DoubleEndedAddressableHeapHandle
+    _LongLongAddressableHeapHandle, DoubleEndedAddressableHeapHandle
 ):
     """A double ended handle on an element in a heap. This handle supports long keys
     and long integer values.
@@ -101,13 +94,6 @@ class _DoubleEndedLongLongAddressableHeapHandle(
 
     def __init__(self, handle, **kwargs):
         super().__init__(handle=handle, **kwargs)
-
-    @property
-    def key(self):
-        return backend.jheaps_AHeapHandle_L_get_key(self._handle)
-
-    def decrease_key(self, key):
-        backend.jheaps_AHeapHandle_L_decrease_key(self._handle, key)
 
     def increase_key(self, key):
         backend.jheaps_DEAHeapHandle_L_increase_key(self._handle, key)

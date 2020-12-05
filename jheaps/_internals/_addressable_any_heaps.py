@@ -3,6 +3,8 @@ from ..types import (
     AddressableHeapHandle,
     AddressableHeap,
     MergeableHeap,
+    DoubleEndedAddressableHeapHandle,
+    DoubleEndedAddressableHeap,
 )
 from ._wrappers import _HandleWrapper
 
@@ -84,6 +86,23 @@ class _DoubleAnyAddressableHeapHandle(_BaseAnyValueAddressableHeapHandle):
         return "_DoubleAnyAddressableHeapHandle(%r)" % self._handle
 
 
+class _DoubleEndedDoubleAnyAddressableHeapHandle(
+    _DoubleAnyAddressableHeapHandle, DoubleEndedAddressableHeapHandle
+):
+    """A double ended handle on an element in a heap. This handle supports double keys
+    and any hashable value.
+    """
+
+    def __init__(self, handle, value_owner=False, **kwargs):
+        super().__init__(handle, value_owner, **kwargs)
+
+    def increase_key(self, key):
+        backend.jheaps_DEAHeapHandle_D_increase_key(self._handle, key)
+
+    def __repr__(self):
+        return "_DoubleEndedDoubleAnyAddressableHeapHandle(%r)" % self._handle
+
+
 class _LongAnyAddressableHeapHandle(_BaseAnyValueAddressableHeapHandle):
     """A handle on an element in a heap. This handle supports long keys
     and any hashable value.
@@ -108,10 +127,28 @@ class _LongAnyAddressableHeapHandle(_BaseAnyValueAddressableHeapHandle):
         return "_LongAnyAddressableHeapHandle(%r)" % self._handle
 
 
+class _DoubleEndedLongAnyAddressableHeapHandle(
+    _LongAnyAddressableHeapHandle, DoubleEndedAddressableHeapHandle
+):
+    """A double ended handle on an element in a heap. This handle supports long keys
+    and any hashable value.
+    """
+
+    def __init__(self, handle, value_owner=False, **kwargs):
+        super().__init__(handle, value_owner, **kwargs)
+
+    def increase_key(self, key):
+        backend.jheaps_DEAHeapHandle_L_increase_key(self._handle, key)
+
+    def __repr__(self):
+        return "_DoubleEndedLongAnyAddressableHeapHandle(%r)" % self._handle
+
+
 class _AnyLongAddressableHeapHandle(_BaseLongValueAddressableHeapHandle):
     """A handle on an element in a heap. This handle supports any hashable key
     and long value.
     """
+
     def __init__(self, handle, key_owner=False, **kwargs):
         super().__init__(handle, **kwargs)
         self._key_owner = key_owner
@@ -148,6 +185,30 @@ class _AnyLongAddressableHeapHandle(_BaseLongValueAddressableHeapHandle):
 
     def __repr__(self):
         return "_AnyLongAddressableHeapHandle(%r)" % self._handle
+
+
+class _DoubleEndedAnyLongAddressableHeapHandle(
+    _AnyLongAddressableHeapHandle, DoubleEndedAddressableHeapHandle
+):
+    """A handle on an element in a heap. This handle supports any hashable key
+    and long value.
+    """
+
+    def __init__(self, handle, key_owner=False, **kwargs):
+        super().__init__(handle, key_owner, **kwargs)
+
+    def increase_key(self, key):
+        old_key_id = backend.jheaps_AHeapHandle_L_get_key(self._handle)
+        backend.jheaps_DEAHeapHandle_L_increase_key(self._handle, id(key))
+
+        if self._key_owner:
+            raise ValueError("Cannot be key owner to a valid handle")
+
+        _dec_ref_by_id(old_key_id)
+        _inc_ref(key)
+
+    def __repr__(self):
+        return "_DoubleEndedAnyLongAddressableHeapHandle(%r)" % self._handle
 
 
 class _AnyAnyAddressableHeapHandle(_BaseAnyValueAddressableHeapHandle):
@@ -191,6 +252,28 @@ class _AnyAnyAddressableHeapHandle(_BaseAnyValueAddressableHeapHandle):
 
     def __repr__(self):
         return "_AnyAnyAddressableHeapHandle(%r)" % self._handle
+
+
+class _DoubleEndedAnyAnyAddressableHeapHandle(_AnyAnyAddressableHeapHandle):
+    """A double ended handle on an element in a heap. This handle supports any hashable key
+    and any hashable value.
+    """
+
+    def __init__(self, handle, key_owner=False, value_owner=False, **kwargs):
+        super().__init__(handle, key_owner, value_owner, **kwargs)
+
+    def decrease_key(self, key):
+        old_key_id = backend.jheaps_AHeapHandle_L_get_key(self._handle)
+        backend.jheaps_DEAHeapHandle_L_increase_key(self._handle, id(key))
+
+        if self._key_owner:
+            raise ValueError("Cannot be key owner to a valid handle")
+
+        _dec_ref_by_id(old_key_id)
+        _inc_ref(key)
+
+    def __repr__(self):
+        return "_DoubleEndedAnyAnyAddressableHeapHandle(%r)" % self._handle
 
 
 class _BaseAnyAddressableHeap(_HandleWrapper, AddressableHeap):
@@ -247,9 +330,54 @@ class _DoubleAnyAddressableHeap(_BaseAnyAddressableHeap):
         return "_DoubleAnyAddressableHeap(%r)" % self._handle
 
 
-class _DoubleAnyMergeableAddressableHeap(_DoubleAnyAddressableHeap, MergeableHeap): 
-    """A mergable and addressable heap.
-    """
+class _DoubleEndedDoubleAnyAddressableHeap(
+    _BaseAnyAddressableHeap, DoubleEndedAddressableHeap
+):
+    """A double ended heap with floating point keys and any hashable values."""
+
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+
+    def insert(self, key, value):
+        if value is None:
+            raise ValueError("Value cannot be None")
+        _inc_ref(value)
+        res = backend.jheaps_AHeap_D_insert_key_value(self._handle, key, id(value))
+        return _DoubleEndedDoubleAnyAddressableHeapHandle(res)
+
+    def find_min(self):
+        res = backend.jheaps_AHeap_find_min(self._handle)
+        return _DoubleEndedDoubleAnyAddressableHeapHandle(res)
+
+    def delete_min(self):
+        res = backend.jheaps_AHeap_delete_min(self._handle)
+        # pass value ownership to handle
+        return _DoubleEndedDoubleAnyAddressableHeapHandle(res, value_owner=True)
+
+    def find_max(self):
+        res = backend.jheaps_DEAHeap_find_max(self._handle)
+        return _DoubleEndedDoubleAnyAddressableHeapHandle(res)
+
+    def delete_max(self):
+        res = backend.jheaps_DEAHeap_delete_max(self._handle)
+        # pass value ownership to handle
+        return _DoubleEndedDoubleAnyAddressableHeapHandle(res, value_owner=True)
+
+    def clear(self):
+        # Clean one by one in order to decrease reference counts
+        while not self.is_empty():
+            res = backend.jheaps_AHeap_delete_min(self._handle)
+            value_id = backend.jheaps_AHeapHandle_get_value(res)
+            _dec_ref_by_id(value_id)
+            backend.jheaps_handles_destroy(res)
+
+    def __repr__(self):
+        return "_DoubleEndedDoubleAnyAddressableHeap(%r)" % self._handle
+
+
+class _DoubleAnyMergeableAddressableHeap(_DoubleAnyAddressableHeap, MergeableHeap):
+    """A mergable and addressable heap."""
+
     def __init__(self, handle, **kwargs):
         super().__init__(handle=handle, **kwargs)
 
@@ -296,9 +424,54 @@ class _LongAnyAddressableHeap(_BaseAnyAddressableHeap):
         return "_LongAnyAddressableHeap(%r)" % self._handle
 
 
-class _LongAnyMergeableAddressableHeap(_LongAnyAddressableHeap, MergeableHeap): 
-    """A mergable and addressable heap.
-    """
+class _DoubleEndedLongAnyAddressableHeap(
+    _BaseAnyAddressableHeap, DoubleEndedAddressableHeap
+):
+    """A double ended heap with long keys and any hashable values."""
+
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+
+    def insert(self, key, value):
+        if value is None:
+            raise ValueError("Value cannot be None")
+        _inc_ref(value)
+        res = backend.jheaps_AHeap_L_insert_key_value(self._handle, key, id(value))
+        return _DoubleEndedLongAnyAddressableHeapHandle(res)
+
+    def find_min(self):
+        res = backend.jheaps_AHeap_find_min(self._handle)
+        return _DoubleEndedLongAnyAddressableHeapHandle(res)
+
+    def delete_min(self):
+        res = backend.jheaps_AHeap_delete_min(self._handle)
+        # pass value ownership to handle
+        return _DoubleEndedLongAnyAddressableHeapHandle(res, value_owner=True)
+
+    def find_max(self):
+        res = backend.jheaps_DEAHeap_find_max(self._handle)
+        return _DoubleEndedLongAnyAddressableHeapHandle(res)
+
+    def delete_max(self):
+        res = backend.jheaps_DEAHeap_delete_max(self._handle)
+        # pass value ownership to handle
+        return _DoubleEndedLongAnyAddressableHeapHandle(res, value_owner=True)
+
+    def clear(self):
+        # Clean one by one in order to decrease reference counts
+        while not self.is_empty():
+            res = backend.jheaps_AHeap_delete_min(self._handle)
+            value_id = backend.jheaps_AHeapHandle_get_value(res)
+            _dec_ref_by_id(value_id)
+            backend.jheaps_handles_destroy(res)
+
+    def __repr__(self):
+        return "_DoubleEndedLongAnyAddressableHeap(%r)" % self._handle
+
+
+class _LongAnyMergeableAddressableHeap(_LongAnyAddressableHeap, MergeableHeap):
+    """A mergable and addressable heap."""
+
     def __init__(self, handle, **kwargs):
         super().__init__(handle=handle, **kwargs)
 
@@ -344,9 +517,54 @@ class _AnyLongAddressableHeap(_BaseAnyAddressableHeap):
         return "_AnyLongAddressableHeap(%r)" % self._handle
 
 
-class _AnyLongMergeableAddressableHeap(_AnyLongAddressableHeap, MergeableHeap): 
-    """A mergable and addressable heap.
+class _DoubleEndedAnyLongAddressableHeap(
+    _BaseAnyAddressableHeap, DoubleEndedAddressableHeap
+):
+    """A double ended with any hashable key and long value.
     """
+
+    def __init__(self, handle, comparator, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+        self._comparator = comparator
+
+    def insert(self, key, value):
+        _inc_ref(key)
+        res = backend.jheaps_AHeap_L_insert_key_value(self._handle, id(key), value)
+        return _DoubleEndedAnyLongAddressableHeapHandle(res)
+
+    def find_min(self):
+        res = backend.jheaps_AHeap_find_min(self._handle)
+        return _DoubleEndedAnyLongAddressableHeapHandle(res)
+
+    def delete_min(self):
+        res = backend.jheaps_AHeap_delete_min(self._handle)
+        # pass key ownership to handle
+        return _DoubleEndedAnyLongAddressableHeapHandle(res, key_owner=True)
+
+    def find_max(self):
+        res = backend.jheaps_DEAHeap_find_max(self._handle)
+        return _DoubleEndedAnyLongAddressableHeapHandle(res)
+
+    def delete_max(self):
+        res = backend.jheaps_DEAHeap_delete_max(self._handle)
+        # pass key ownership to handle
+        return _DoubleEndedAnyLongAddressableHeapHandle(res, key_owner=True)
+
+    def clear(self):
+        # Clean one by one in order to decrease reference counts
+        while not self.is_empty():
+            res = backend.jheaps_AHeap_delete_min(self._handle)
+            key_id = backend.jheaps_AHeapHandle_L_get_key(res)
+            _dec_ref_by_id(key_id)
+            backend.jheaps_handles_destroy(res)
+
+    def __repr__(self):
+        return "_DoubleEndedAnyLongAddressableHeap(%r)" % self._handle
+
+
+class _AnyLongMergeableAddressableHeap(_AnyLongAddressableHeap, MergeableHeap):
+    """A mergable and addressable heap."""
+
     def __init__(self, handle, **kwargs):
         super().__init__(handle=handle, **kwargs)
 
@@ -397,9 +615,57 @@ class _AnyAnyAddressableHeap(_BaseAnyAddressableHeap):
         return "_AnyAnyAddressableHeap(%r)" % self._handle
 
 
-class _AnyAnyMergeableAddressableHeap(_AnyAnyAddressableHeap, MergeableHeap): 
-    """A mergable and addressable heap.
+class _DoubleEndedAnyAnyAddressableHeap(_BaseAnyAddressableHeap, DoubleEndedAddressableHeap):
+    """A double ended heap with any hashable key and any hashable value.
     """
+
+    def __init__(self, handle, comparator, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+        self._comparator = comparator
+
+    def insert(self, key, value):
+        if value is None:
+            raise ValueError("Value cannot be None")
+        _inc_ref(key)
+        _inc_ref(value)
+        res = backend.jheaps_AHeap_L_insert_key_value(self._handle, id(key), id(value))
+        return _DoubleEndedAnyAnyAddressableHeapHandle(res)
+
+    def find_min(self):
+        res = backend.jheaps_AHeap_find_min(self._handle)
+        return _DoubleEndedAnyAnyAddressableHeapHandle(res)
+
+    def delete_min(self):
+        res = backend.jheaps_AHeap_delete_min(self._handle)
+        # pass key and value ownership to handle
+        return _DoubleEndedAnyAnyAddressableHeapHandle(res, key_owner=True, value_owner=True)
+
+    def find_max(self):
+        res = backend.jheaps_DEAHeap_find_max(self._handle)
+        return _DoubleEndedAnyAnyAddressableHeapHandle(res)
+
+    def delete_max(self):
+        res = backend.jheaps_DEAHeap_delete_max(self._handle)
+        # pass key and value ownership to handle
+        return _DoubleEndedAnyAnyAddressableHeapHandle(res, key_owner=True, value_owner=True)
+
+    def clear(self):
+        # Clean one by one in order to decrease reference counts
+        while not self.is_empty():
+            res = backend.jheaps_AHeap_delete_min(self._handle)
+            key_id = backend.jheaps_AHeapHandle_L_get_key(res)
+            value_id = backend.jheaps_AHeapHandle_get_value(res)
+            _dec_ref_by_id(key_id)
+            _dec_ref_by_id(value_id)
+            backend.jheaps_handles_destroy(res)
+
+    def __repr__(self):
+        return "_DoubleEndedAnyAnyAddressableHeap(%r)" % self._handle
+
+
+class _AnyAnyMergeableAddressableHeap(_AnyAnyAddressableHeap, MergeableHeap):
+    """A mergable and addressable heap."""
+
     def __init__(self, handle, **kwargs):
         super().__init__(handle=handle, **kwargs)
 
