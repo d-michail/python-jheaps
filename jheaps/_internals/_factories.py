@@ -15,19 +15,25 @@ from ._heaps import (
 
 from ._addressable_heaps import (
     _DoubleLongAddressableHeap,
+    _DoubleEndedDoubleLongAddressableHeap,
     _DoubleLongMergeableAddressableHeap,
     _LongLongAddressableHeap,
+    _DoubleEndedLongLongAddressableHeap,
     _LongLongMergeableAddressableHeap,
 )
 
 from ._addressable_any_heaps import (
     _DoubleAnyAddressableHeap,
+    _DoubleEndedDoubleAnyAddressableHeap,
     _DoubleAnyMergeableAddressableHeap,
     _LongAnyAddressableHeap,
+    _DoubleEndedLongAnyAddressableHeap,
     _LongAnyMergeableAddressableHeap,
     _AnyLongAddressableHeap,
+    _DoubleEndedAnyLongAddressableHeap,
     _AnyLongMergeableAddressableHeap,
     _AnyAnyAddressableHeap,
+    _DoubleEndedAnyAnyAddressableHeap,
     _AnyAnyMergeableAddressableHeap,
 )
 
@@ -47,42 +53,62 @@ def _wrap_heap(
     double_ended=False,
 ):
     if addressable:
-        if mergeable:
-            if key_type == float:
-                if value_type == int:
-                    return _DoubleLongMergeableAddressableHeap(handle)
-                else:
-                    return _DoubleAnyMergeableAddressableHeap(handle)
-            elif key_type == int:
-                if value_type == int:
-                    return _LongLongMergeableAddressableHeap(handle)
-                else:
-                    return _LongAnyMergeableAddressableHeap(handle)
+        if double_ended:
+            if mergeable:
+                raise ValueError('Double-ended and mergeable not supported at the same time')
             else:
-                if value_type == int:
-                    return _AnyLongMergeableAddressableHeap(
-                        handle, comparator=comparator
-                    )
+                if key_type == float:
+                    if value_type == int:
+                        return _DoubleEndedDoubleLongAddressableHeap(handle)
+                    else:
+                        return _DoubleEndedDoubleAnyAddressableHeap(handle)
+                elif key_type == int:
+                    if value_type == int:
+                        return _DoubleEndedLongLongAddressableHeap(handle)
+                    else:
+                        return _DoubleEndedLongAnyAddressableHeap(handle)
                 else:
-                    return _AnyAnyMergeableAddressableHeap(
-                        handle, comparator=comparator
-                    )
+                    if value_type == int:
+                        return _DoubleEndedAnyLongAddressableHeap(handle, comparator=comparator)
+                    else:
+                        return _DoubleEndedAnyAnyAddressableHeap(handle, comparator=comparator)
         else:
-            if key_type == float:
-                if value_type == int:
-                    return _DoubleLongAddressableHeap(handle)
+            if mergeable:
+                if key_type == float:
+                    if value_type == int:
+                        return _DoubleLongMergeableAddressableHeap(handle)
+                    else:
+                        return _DoubleAnyMergeableAddressableHeap(handle)
+                elif key_type == int:
+                    if value_type == int:
+                        return _LongLongMergeableAddressableHeap(handle)
+                    else:
+                        return _LongAnyMergeableAddressableHeap(handle)
                 else:
-                    return _DoubleAnyAddressableHeap(handle)
-            elif key_type == int:
-                if value_type == int:
-                    return _LongLongAddressableHeap(handle)
-                else:
-                    return _LongAnyAddressableHeap(handle)
+                    if value_type == int:
+                        return _AnyLongMergeableAddressableHeap(
+                            handle, comparator=comparator
+                        )
+                    else:
+                        return _AnyAnyMergeableAddressableHeap(
+                            handle, comparator=comparator
+                        )
             else:
-                if value_type == int:
-                    return _AnyLongAddressableHeap(handle, comparator=comparator)
+                if key_type == float:
+                    if value_type == int:
+                        return _DoubleLongAddressableHeap(handle)
+                    else:
+                        return _DoubleAnyAddressableHeap(handle)
+                elif key_type == int:
+                    if value_type == int:
+                        return _LongLongAddressableHeap(handle)
+                    else:
+                        return _LongAnyAddressableHeap(handle)
                 else:
-                    return _AnyAnyAddressableHeap(handle, comparator=comparator)
+                    if value_type == int:
+                        return _AnyLongAddressableHeap(handle, comparator=comparator)
+                    else:
+                        return _AnyAnyAddressableHeap(handle, comparator=comparator)
     else:
         if double_ended:
             if key_type == float:
