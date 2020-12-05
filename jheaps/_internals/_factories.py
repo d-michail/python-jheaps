@@ -41,6 +41,7 @@ def _wrap_heap(
     comparator=None,
     addressable=True,
     mergeable=False,
+    double_ended=False,
 ):
     if addressable:
         if mergeable:

@@ -62,6 +62,14 @@ int jheaps_AHeapHandle_L_decrease_key(void *, long long int);
 
 int jheaps_AHeapHandle_delete(void *);
 
+int jheaps_DEHeap_D_find_max(void *, double*);
+
+int jheaps_DEHeap_L_find_max(void *, long long*);
+
+int jheaps_DEHeap_D_delete_max(void *, double*);
+
+int jheaps_DEHeap_L_delete_max(void *, long long*);
+
 int jheaps_handles_destroy(void *);
 
 int jheaps_handles_get_ccharpointer(void *, char**);
