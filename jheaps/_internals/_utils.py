@@ -24,7 +24,7 @@ def _dec_ref(obj):
 
 def _dec_ref_by_id(id):
     """Decrease the reference count of an object given by its id."""
-    _c_inc_ref(_id_to_obj(id))
+    _c_dec_ref(_id_to_obj(id))
 
 
 def _ref_count(obj, normalize=True):
