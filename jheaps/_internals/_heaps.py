@@ -50,6 +50,22 @@ class _DoubleHeap(_BaseHeap):
         return "_DoubleHeap(%r)" % self._handle
 
 
+class _DoubleEndedDoubleHeap(_DoubleHeap, DoubleEndedHeap): 
+    """A double ended heap with floating point keys.
+    """
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+
+    def find_max(self):
+        return backend.jheaps_DEHeap_D_find_max(self._handle)
+
+    def delete_max(self):
+        return backend.jheaps_DEHeap_D_delete_max(self._handle)
+
+    def __repr__(self):
+        return "_DoubleEndedDoubleHeap(%r)" % self._handle
+
+
 class _LongHeap(_BaseHeap): 
     """A Heap with long integer keys. All operations are delegated to the backend.
     """
@@ -67,6 +83,22 @@ class _LongHeap(_BaseHeap):
 
     def __repr__(self):
         return "_LongHeap(%r)" % self._handle
+
+
+class _DoubleEndedLongHeap(_LongHeap, DoubleEndedHeap): 
+    """A double ended heap with long integer keys.
+    """
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+
+    def find_max(self):
+        return backend.jheaps_DEHeap_L_find_max(self._handle)
+
+    def delete_max(self):
+        return backend.jheaps_DEHeap_L_delete_max(self._handle)
+
+    def __repr__(self):
+        return "_DoubleEndedLongHeap(%r)" % self._handle
 
 
 class _AnyHeap(_BaseHeap): 
@@ -98,3 +130,21 @@ class _AnyHeap(_BaseHeap):
     def __repr__(self):
         return "_AnyHeap(%r)" % self._handle
 
+
+class _DoubleEndedAnyHeap(_AnyHeap, DoubleEndedHeap): 
+    """A double ended heap with any hashable keys.
+    """
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+
+    def find_max(self):
+        key_id = backend.jheaps_DEHeap_L_find_max(self._handle)
+        return _id_to_obj(key_id)
+
+    def delete_max(self):
+        key_id = backend.jheaps_DEHeap_L_delete_max(self._handle)
+        _dec_ref_by_id(key_id)
+        return _id_to_obj(key_id)
+
+    def __repr__(self):
+        return "_DoubleEndedAnyHeap(%r)" % self._handle

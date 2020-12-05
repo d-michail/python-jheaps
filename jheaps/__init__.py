@@ -77,6 +77,7 @@ def create_addressable_dary_heap(key_type=float, value_type=int, d=4, explicit=F
         value_type=value_type,
         addressable=True,
         mergeable=False,
+        double_ended=False,
     )
 
 
@@ -99,6 +100,7 @@ def create_implicit_dary_heap(key_type=float, d=4):
         value_type=None,
         addressable=False,
         mergeable=False,
+        double_ended=False,
     )
 
 
@@ -123,6 +125,7 @@ def create_implicit_weak_binary_heap(key_type=float, bulk_insert=False):
         value_type=None,
         addressable=False,
         mergeable=False,
+        double_ended=False,
     )
 
 
@@ -142,6 +145,27 @@ def create_implicit_binary_heap(key_type=float):
         value_type=None,
         addressable=False,
         mergeable=False,
+        double_ended=False,
+    )
+
+
+def create_doublended_implicit_binary_heap(key_type=float): 
+    """Create an implicit (array-based) binary MinMax heap.
+
+    :param key_type: the key type
+    :type key_type: float, int or object
+    :returns: the heap
+    :rtype: :py:class:`.DoubleEndedHeap`
+    """
+    heap_type = _HeapType.HEAP_TYPE_DOUBLEENDED_BINARY_IMPLICIT_MINMAX
+
+    return _create_and_wrap_heap(
+        heap_type,
+        key_type,
+        value_type=None,
+        addressable=False,
+        mergeable=False,
+        double_ended=True,
     )
 
 
@@ -168,6 +192,7 @@ def create_addressable_binary_heap(key_type=float, value_type=int, explicit=Fals
         value_type,
         addressable=True,
         mergeable=False,
+        double_ended=False,
     )
 
 
@@ -191,6 +216,7 @@ def create_doubleended_addressable_fibonacci_heap(key_type=float, value_type=int
         value_type,
         addressable=True,
         mergeable=True,
+        double_ended=True,
     )
     pass
 
@@ -223,6 +249,7 @@ def create_addressable_fibonacci_heap(
         value_type,
         addressable=True,
         mergeable=True,
+        double_ended=False,
     )
 
 
@@ -237,6 +264,7 @@ def create_doubleended_addressable_pairing_heap(
         value_type,
         addressable=True,
         mergeable=True,
+        double_ended=True,
     )
 
 
@@ -256,6 +284,7 @@ def create_addressable_pairing_heap(
         value_type,
         addressable=True,
         mergeable=True,
+        double_ended=False,
     )
 
 
@@ -277,6 +306,7 @@ def create_addressable_hollow_heap(key_type=float, value_type=int):
         value_type,
         addressable=True,
         mergeable=True,
+        double_ended=False,
     )
 
 
@@ -298,6 +328,7 @@ def create_addressable_leftist_heap(key_type=float, value_type=int):
         value_type,
         addressable=True,
         mergeable=True,
+        double_ended=False,
     )
 
 
@@ -319,6 +350,7 @@ def create_addressable_skew_heap(key_type=float, value_type=int):
         value_type,
         addressable=True,
         mergeable=True,
+        double_ended=False,
     )
 
 
@@ -366,6 +398,7 @@ def create_addressable_radix_heap(key_type=float, value_type=int, min=None, max=
         value_type,
         addressable=True,
         mergeable=False,
+        double_ended=False,
     )
 
 
@@ -411,4 +444,5 @@ def create_radix_heap(key_type=float, min=None, max=None):
         value_type=None,
         addressable=False,
         mergeable=False,
+        double_ended=False,
     )
