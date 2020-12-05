@@ -162,6 +162,22 @@ int jheaps_AHeapHandle_delete(void *handle) {
     return jheaps_capi_AHeapHandle_delete(thread, handle);
 }
 
+int jheaps_DEAHeap_find_max(void *handle, void** res) { 
+    return jheaps_capi_DEAHeap_find_max(thread, handle, res);
+}
+
+int jheaps_DEAHeap_delete_max(void *handle, void** res) { 
+    return jheaps_capi_DEAHeap_delete_max(thread, handle, res);
+}
+
+int jheaps_DEAHeapHandle_D_increase_key(void *handle, double key) { 
+    return jheaps_capi_DEAHeapHandle_D_increase_key(thread, handle, key);
+}
+
+int jheaps_DEAHeapHandle_L_increase_key(void *handle, long long int key) { 
+    return jheaps_capi_DEAHeapHandle_L_increase_key(thread, handle, key);
+}
+
 int jheaps_DEHeap_D_find_max(void *handle, double* res) { 
     LAZY_THREAD_ATTACH
     return jheaps_capi_DEHeap_D_find_max(thread, handle, res);

@@ -1,15 +1,17 @@
 from .. import backend
 from ..types import (
     AddressableHeapHandle,
+    DoubleEndedAddressableHeapHandle,
     AddressableHeap,
+    DoubleEndedAddressableHeap,
     MergeableHeap,
 )
 from ._wrappers import _HandleWrapper
 
 
 class _BaseLongValueAddressableHeapHandle(_HandleWrapper, AddressableHeapHandle):
-    """A handle on an element in a heap. This handle supports long integer values.
-    """
+    """A handle on an element in a heap. This handle supports long integer values."""
+
     def __init__(self, handle, **kwargs):
         super().__init__(handle=handle, **kwargs)
 
@@ -32,6 +34,7 @@ class _DoubleLongAddressableHeapHandle(_BaseLongValueAddressableHeapHandle):
     """A handle on an element in a heap. This handle supports double keys
     and long integer values.
     """
+
     def __init__(self, handle, **kwargs):
         super().__init__(handle=handle, **kwargs)
 
@@ -46,10 +49,35 @@ class _DoubleLongAddressableHeapHandle(_BaseLongValueAddressableHeapHandle):
         return "_DoubleLongAddressableHeapHandle(%r)" % self._handle
 
 
-class _LongLongAddressableHeapHandle(_BaseLongValueAddressableHeapHandle):
-    """A handle on an element in a heap. This handle supports long keys 
+class _DoubleEndedDoubleLongAddressableHeapHandle(
+    _BaseLongValueAddressableHeapHandle, DoubleEndedAddressableHeapHandle
+):
+    """A double ended handle on an element in a heap. This handle supports double keys
     and long integer values.
     """
+
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+
+    @property
+    def key(self):
+        return backend.jheaps_AHeapHandle_D_get_key(self._handle)
+
+    def decrease_key(self, key):
+        backend.jheaps_AHeapHandle_D_decrease_key(self._handle, key)
+
+    def increase_key(self, key):
+        backend.jheaps_DEAHeapHandle_D_increase_key(self._handle, key)
+
+    def __repr__(self):
+        return "_DoubleEndedDoubleLongAddressableHeapHandle(%r)" % self._handle
+
+
+class _LongLongAddressableHeapHandle(_BaseLongValueAddressableHeapHandle):
+    """A handle on an element in a heap. This handle supports long keys
+    and long integer values.
+    """
+
     def __init__(self, handle, **kwargs):
         super().__init__(handle=handle, **kwargs)
 
@@ -64,10 +92,35 @@ class _LongLongAddressableHeapHandle(_BaseLongValueAddressableHeapHandle):
         return "_LongLongAddressableHeapHandle(%r)" % self._handle
 
 
-class _BaseAddressableHeap(_HandleWrapper, AddressableHeap): 
+class _DoubleEndedLongLongAddressableHeapHandle(
+    _BaseLongValueAddressableHeapHandle, DoubleEndedAddressableHeapHandle
+):
+    """A double ended handle on an element in a heap. This handle supports long keys
+    and long integer values.
+    """
+
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+
+    @property
+    def key(self):
+        return backend.jheaps_AHeapHandle_L_get_key(self._handle)
+
+    def decrease_key(self, key):
+        backend.jheaps_AHeapHandle_L_decrease_key(self._handle, key)
+
+    def increase_key(self, key):
+        backend.jheaps_DEAHeapHandle_L_increase_key(self._handle, key)
+
+    def __repr__(self):
+        return "_DoubleEndedLongLongAddressableHeapHandle(%r)" % self._handle
+
+
+class _BaseAddressableHeap(_HandleWrapper, AddressableHeap):
     """A Heap with long values. All operations are delegated
     to the backend.
     """
+
     def __init__(self, handle, **kwargs):
         super().__init__(handle=handle, **kwargs)
 
@@ -84,10 +137,11 @@ class _BaseAddressableHeap(_HandleWrapper, AddressableHeap):
         return "_BaseAddressableHeap(%r)" % self._handle
 
 
-class _DoubleLongAddressableHeap(_BaseAddressableHeap): 
+class _DoubleLongAddressableHeap(_BaseAddressableHeap):
     """A Heap with floating point keys and long values. All operations are delegated
     to the backend.
     """
+
     def __init__(self, handle, **kwargs):
         super().__init__(handle=handle, **kwargs)
 
@@ -107,9 +161,43 @@ class _DoubleLongAddressableHeap(_BaseAddressableHeap):
         return "_DoubleLongAddressableHeap(%r)" % self._handle
 
 
-class _DoubleLongMergeableAddressableHeap(_DoubleLongAddressableHeap, MergeableHeap): 
-    """A mergable and addressable heap with double keys and long values.
+class _DoubleEndedDoubleLongAddressableHeap(
+    _BaseAddressableHeap, DoubleEndedAddressableHeap
+):
+    """A double ended heap with floating point keys and long values. All operations
+    are delegated to the backend.
     """
+
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+
+    def insert(self, key, value=0):
+        res = backend.jheaps_AHeap_D_insert_key_value(self._handle, key, value)
+        return _DoubleEndedDoubleLongAddressableHeapHandle(res)
+
+    def find_min(self):
+        res = backend.jheaps_AHeap_find_min(self._handle)
+        return _DoubleEndedDoubleLongAddressableHeapHandle(res)
+
+    def delete_min(self):
+        res = backend.jheaps_AHeap_delete_min(self._handle)
+        return _DoubleEndedDoubleLongAddressableHeapHandle(res)
+
+    def find_max(self):
+        res = backend.jheaps_DEAHeap_find_max(self._handle)
+        return _DoubleEndedDoubleLongAddressableHeapHandle(res)
+
+    def delete_max(self):
+        res = backend.jheaps_DEAHeap_delete_max(self._handle)
+        return _DoubleEndedDoubleLongAddressableHeapHandle(res)
+
+    def __repr__(self):
+        return "_DoubleEndedDoubleLongAddressableHeap(%r)" % self._handle
+
+
+class _DoubleLongMergeableAddressableHeap(_DoubleLongAddressableHeap, MergeableHeap):
+    """A mergable and addressable heap with double keys and long values."""
+
     def __init__(self, handle, **kwargs):
         super().__init__(handle=handle, **kwargs)
 
@@ -120,10 +208,11 @@ class _DoubleLongMergeableAddressableHeap(_DoubleLongAddressableHeap, MergeableH
         return "_DoubleLongMergeableAddressableHeap(%r)" % self._handle
 
 
-class _LongLongAddressableHeap(_BaseAddressableHeap): 
+class _LongLongAddressableHeap(_BaseAddressableHeap):
     """A Heap with long keys and long values. All operations are delegated
     to the backend.
     """
+
     def __init__(self, handle, **kwargs):
         super().__init__(handle=handle, **kwargs)
 
@@ -143,9 +232,43 @@ class _LongLongAddressableHeap(_BaseAddressableHeap):
         return "_LongLongAddressableHeap(%r)" % self._handle
 
 
-class _LongLongMergeableAddressableHeap(_LongLongAddressableHeap, MergeableHeap): 
-    """A mergable and addressable heap with long keys and long values.
+class _DoubleEndedLongLongAddressableHeap(
+    _BaseAddressableHeap, DoubleEndedAddressableHeap
+):
+    """A double ended heap with long keys and long values. All operations are delegated
+    to the backend.
     """
+
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+
+    def insert(self, key, value=0):
+        res = backend.jheaps_AHeap_L_insert_key_value(self._handle, key, value)
+        return _DoubleEndedLongLongAddressableHeapHandle(res)
+
+    def find_min(self):
+        res = backend.jheaps_AHeap_find_min(self._handle)
+        return _DoubleEndedLongLongAddressableHeapHandle(res)
+
+    def delete_min(self):
+        res = backend.jheaps_AHeap_delete_min(self._handle)
+        return _DoubleEndedLongLongAddressableHeapHandle(res)
+
+    def find_max(self):
+        res = backend.jheaps_DEAHeap_find_max(self._handle)
+        return _DoubleEndedLongLongAddressableHeapHandle(res)
+
+    def delete_max(self):
+        res = backend.jheaps_DEAHeap_delete_max(self._handle)
+        return _DoubleEndedLongLongAddressableHeapHandle(res)
+
+    def __repr__(self):
+        return "_DoubleEndedLongLongAddressableHeap(%r)" % self._handle
+
+
+class _LongLongMergeableAddressableHeap(_LongLongAddressableHeap, MergeableHeap):
+    """A mergable and addressable heap with long keys and long values."""
+
     def __init__(self, handle, **kwargs):
         super().__init__(handle=handle, **kwargs)
 
@@ -154,5 +277,3 @@ class _LongLongMergeableAddressableHeap(_LongLongAddressableHeap, MergeableHeap)
 
     def __repr__(self):
         return "_LongLongMergeableAddressableHeap(%r)" % self._handle
-
-
