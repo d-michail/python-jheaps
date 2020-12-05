@@ -4,7 +4,7 @@
 
 Python bindings for the  [JHeaps library](https://jheaps.org/).
 
-The JHeaps is a free library that provides various heap implementations.
+The JHeaps is a free Java library that provides various heap implementations.
 
 While the original library is written in Java, this package uses a *native build* provided by
 the [jheaps-capi](https://github.com/d-michail/jheaps-capi) project. The native build is in the form of a 
