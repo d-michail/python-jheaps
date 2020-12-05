@@ -22,11 +22,17 @@ or delete the element completely from the heap.
    :inherited-members:
    :members:
 
+MergeableHeap
+^^^^^^^^^^^^^
+
 Most addressable heaps are also mergeable.
 
 .. autoclass:: jheaps.types.MergeableHeap
    :inherited-members:
    :members:
+
+DoubleEndedAddressableHeap
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The library also contains a few double ended addressable heaps.
 
@@ -47,6 +53,9 @@ interface, values are not supported.
 .. autoclass:: jheaps.types.Heap
    :inherited-members:
    :members:
+
+DoubleEndedHeap
+^^^^^^^^^^^^^^^
 
 Support is also provided for double ended heaps.
 
