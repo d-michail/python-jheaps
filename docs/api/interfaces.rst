@@ -19,4 +19,17 @@ The main interface of the library is the :class:`AddressableHeap <jheaps.types.A
    :inherited-members:
    :members:
 
+Most addressable heaps are also mergeable
+
+.. autoclass:: jheaps.types.MergeableHeap
+   :inherited-members:
+   :members:
+
+
+Heap
+^^^^
+
+.. autoclass:: jheaps.types.Heap
+   :inherited-members:
+   :members:
 

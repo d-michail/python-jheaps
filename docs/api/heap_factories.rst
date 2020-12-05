@@ -16,6 +16,11 @@ better performance is provided for `float` and `int` keys or values. All other t
 represented using `object` and thus entail additional overhead. When keys are objects, comparisons 
 are performed using `__lt__` and `__eq__`.
 
+Additionally several addressable heaps are also mergeable heaps following the 
+:py:class:`.Mergeable` interface and thus efficiently support melding with another heap. Note, however,
+that after a meld one of the two heaps becomes unusable. Additionally, performing cascading melds 
+although efficient due to the use of union-find with path compression, invalidates the claimed bounds.
+
 AddressableHeaps
 ^^^^^^^^^^^^^^^^
 
