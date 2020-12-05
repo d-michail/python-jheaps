@@ -2,6 +2,7 @@ from .. import backend
 from ..types import (
     AddressableHeapHandle,
     AddressableHeap,
+    MergeableHeap,
 )
 from ._wrappers import _HandleWrapper
 
@@ -192,7 +193,7 @@ class _AnyAnyAddressableHeapHandle(_BaseAnyValueAddressableHeapHandle):
         return "_AnyAnyAddressableHeapHandle(%r)" % self._handle
 
 
-class _BaseAnyAddressableHeap(_HandleWrapper):
+class _BaseAnyAddressableHeap(_HandleWrapper, AddressableHeap):
     """A Heap with any hashable values. All operations are delegated
     to the backend.
     """
@@ -246,6 +247,19 @@ class _DoubleAnyAddressableHeap(_BaseAnyAddressableHeap):
         return "_DoubleAnyAddressableHeap(%r)" % self._handle
 
 
+class _DoubleAnyMergeableAddressableHeap(_DoubleAnyAddressableHeap, MergeableHeap): 
+    """A mergable and addressable heap.
+    """
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+
+    def meld(self, other):
+        backend.jheaps_MAHeap_D_meld(self._handle, other._handle)
+
+    def __repr__(self):
+        return "_DoubleAnyMergeableAddressableHeap(%r)" % self._handle
+
+
 class _LongAnyAddressableHeap(_BaseAnyAddressableHeap):
     """A Heap with long keys and any hashable values. All operations are delegated
     to the backend.
@@ -282,6 +296,19 @@ class _LongAnyAddressableHeap(_BaseAnyAddressableHeap):
         return "_LongAnyAddressableHeap(%r)" % self._handle
 
 
+class _LongAnyMergeableAddressableHeap(_LongAnyAddressableHeap, MergeableHeap): 
+    """A mergable and addressable heap.
+    """
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+
+    def meld(self, other):
+        backend.jheaps_MAHeap_L_meld(self._handle, other._handle)
+
+    def __repr__(self):
+        return "_LongAnyMergeableAddressableHeap(%r)" % self._handle
+
+
 class _AnyLongAddressableHeap(_BaseAnyAddressableHeap):
     """A Heap with any hashable key and long value. All operations are delegated
     to the backend.
@@ -315,6 +342,19 @@ class _AnyLongAddressableHeap(_BaseAnyAddressableHeap):
 
     def __repr__(self):
         return "_AnyLongAddressableHeap(%r)" % self._handle
+
+
+class _AnyLongMergeableAddressableHeap(_AnyLongAddressableHeap, MergeableHeap): 
+    """A mergable and addressable heap.
+    """
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+
+    def meld(self, other):
+        backend.jheaps_MAHeap_L_meld(self._handle, other._handle)
+
+    def __repr__(self):
+        return "_AnyLongMergeableAddressableHeap(%r)" % self._handle
 
 
 class _AnyAnyAddressableHeap(_BaseAnyAddressableHeap):
@@ -355,3 +395,16 @@ class _AnyAnyAddressableHeap(_BaseAnyAddressableHeap):
 
     def __repr__(self):
         return "_AnyAnyAddressableHeap(%r)" % self._handle
+
+
+class _AnyAnyMergeableAddressableHeap(_AnyAnyAddressableHeap, MergeableHeap): 
+    """A mergable and addressable heap.
+    """
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+
+    def meld(self, other):
+        backend.jheaps_MAHeap_L_meld(self._handle, other._handle)
+
+    def __repr__(self):
+        return "_AnyAnyMergeableAddressableHeap(%r)" % self._handle

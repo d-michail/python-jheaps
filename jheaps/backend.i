@@ -53,6 +53,7 @@ enum status_t {
     STATUS_NULL_POINTER,
     STATUS_CLASS_CAST,
     STATUS_IO_ERROR,
+    STATUS_ILLEGAL_STATE,
 };
 
 enum heap_type_t {
@@ -136,6 +137,9 @@ int raise_exception_on_error(int result) {
             break;
         case STATUS_IO_ERROR:
             PyErr_SetString(PyExc_IOError, jheaps_error_get_errno_msg());
+            break;
+        case STATUS_ILLEGAL_STATE:
+            PyErr_SetString(PyExc_ValueError, jheaps_error_get_errno_msg());
             break;
         case STATUS_ERROR:
         default:

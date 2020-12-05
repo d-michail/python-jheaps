@@ -2,6 +2,7 @@ from .. import backend
 from ..types import (
     AddressableHeapHandle,
     AddressableHeap,
+    MergeableHeap,
 )
 from ._wrappers import _HandleWrapper
 
@@ -63,7 +64,7 @@ class _LongLongAddressableHeapHandle(_BaseLongValueAddressableHeapHandle):
         return "_LongLongAddressableHeapHandle(%r)" % self._handle
 
 
-class _BaseAddressableHeap(_HandleWrapper): 
+class _BaseAddressableHeap(_HandleWrapper, AddressableHeap): 
     """A Heap with long values. All operations are delegated
     to the backend.
     """
@@ -106,6 +107,19 @@ class _DoubleLongAddressableHeap(_BaseAddressableHeap):
         return "_DoubleLongAddressableHeap(%r)" % self._handle
 
 
+class _DoubleLongMergeableAddressableHeap(_DoubleLongAddressableHeap, MergeableHeap): 
+    """A mergable and addressable heap with double keys and long values.
+    """
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+
+    def meld(self, other):
+        backend.jheaps_MAHeap_D_meld(self._handle, other._handle)
+
+    def __repr__(self):
+        return "_DoubleLongMergeableAddressableHeap(%r)" % self._handle
+
+
 class _LongLongAddressableHeap(_BaseAddressableHeap): 
     """A Heap with long keys and long values. All operations are delegated
     to the backend.
@@ -127,5 +141,18 @@ class _LongLongAddressableHeap(_BaseAddressableHeap):
 
     def __repr__(self):
         return "_LongLongAddressableHeap(%r)" % self._handle
+
+
+class _LongLongMergeableAddressableHeap(_LongLongAddressableHeap, MergeableHeap): 
+    """A mergable and addressable heap with long keys and long values.
+    """
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+
+    def meld(self, other):
+        backend.jheaps_MAHeap_L_meld(self._handle, other._handle)
+
+    def __repr__(self):
+        return "_LongLongMergeableAddressableHeap(%r)" % self._handle
 
 

@@ -3,6 +3,7 @@ from collections.abc import Mapping
 
 from .backend import HeapType
 
+
 class AddressableHeapHandle(ABC):
     """Interface for an addressable heap handle."""
 
@@ -35,18 +36,17 @@ class AddressableHeapHandle(ABC):
 
     @abstractmethod
     def decrease_key(self, key):
-        """Decrease the key of the element represented by 
+        """Decrease the key of the element represented by
         this handle.
-        
+
         :param key: the new key
         """
         pass
 
     @abstractmethod
     def delete(self):
-        """Delete an element.
-        """
-        pass    
+        """Delete an element."""
+        pass
 
 
 class AddressableHeap(ABC):
@@ -63,13 +63,13 @@ class AddressableHeap(ABC):
     @abstractmethod
     def delete_min(self):
         """Delete the minimum element and return a
-        handle. The handle can be used to access the key 
+        handle. The handle can be used to access the key
         or value but not to perform any other operation.
 
         :rtype: :class:`.AddressableHeapHandle`
         """
         pass
-    
+
     @abstractmethod
     def is_empty(self):
         """Check if the heap is empty.
@@ -81,8 +81,7 @@ class AddressableHeap(ABC):
 
     @abstractmethod
     def clear(self):
-        """Clear the heap
-        """
+        """Clear the heap"""
         pass
 
     @abstractmethod
@@ -106,21 +105,30 @@ class AddressableHeap(ABC):
         pass
 
 
+class MergeableHeap(ABC):
+    """Interface for a mergeable heap."""
+
+    @abstractmethod
+    def meld(self, other):
+        """Meld heap other into the current heap. After the meld
+        operation the heap `other` is not usable.
+        """
+        pass
+
+
 class Heap(ABC):
     """Interface for a heap."""
 
     @abstractmethod
     def find_min(self):
-        """Return the minimum key.
-        """
+        """Return the minimum key."""
         pass
 
     @abstractmethod
     def delete_min(self):
-        """Delete the minimum element and return its key.
-        """
+        """Delete the minimum element and return its key."""
         pass
-    
+
     @abstractmethod
     def is_empty(self):
         """Check if the heap is empty.
@@ -132,8 +140,7 @@ class Heap(ABC):
 
     @abstractmethod
     def clear(self):
-        """Clear the heap
-        """
+        """Clear the heap"""
         pass
 
     @abstractmethod
@@ -152,4 +159,3 @@ class Heap(ABC):
         :param key: the key
         """
         pass
-    
