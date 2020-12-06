@@ -262,7 +262,7 @@ class _DoubleEndedAnyAnyAddressableHeapHandle(_AnyAnyAddressableHeapHandle):
     def __init__(self, handle, key_owner=False, value_owner=False, **kwargs):
         super().__init__(handle, key_owner, value_owner, **kwargs)
 
-    def decrease_key(self, key):
+    def increase_key(self, key):
         old_key_id = backend.jheaps_AHeapHandle_L_get_key(self._handle)
         backend.jheaps_DEAHeapHandle_L_increase_key(self._handle, id(key))
 
