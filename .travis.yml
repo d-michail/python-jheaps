@@ -19,7 +19,7 @@ jobs:
           - $HOME/Library/Caches/Homebrew
       sudo: required
       install:
-        - brew install --cask graalvm/tap/graalvm-ce-java11
+        - brew cask install graalvm/tap/graalvm-ce-java11
         - export JAVA_HOME=$(/usr/libexec/java_home -v 11)
         - export PATH=$JAVA_HOME/bin:$PATH  
         - gu install native-image
