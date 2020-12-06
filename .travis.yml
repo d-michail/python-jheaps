@@ -13,12 +13,13 @@ jobs:
         - ls -l dist/
     - os: osx
       language: shell
+      env: HOMEBREW_NO_AUTO_UPDATE=1
       cache:
         directories:
           - $HOME/Library/Caches/Homebrew
       sudo: required
       install:
-        - brew cask install graalvm/tap/graalvm-ce-java11
+        - brew install --cask graalvm/tap/graalvm-ce-java11
         - export JAVA_HOME=$(/usr/libexec/java_home -v 11)
         - export PATH=$JAVA_HOME/bin:$PATH  
         - gu install native-image
