@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 """
-Pairing Heap
-============
+Fibonacci Heap
+==============
 
-In this example we create a pairing heap.
+In this example we create a Fibonacci heap.
 """
 
 # %%
@@ -18,7 +18,7 @@ import jheaps
 # parameters `key_type` and `value_type` in the factory method which can take 
 # values `float`, `int`, `object`.
 
-heap = jheaps.create_addressable_pairing_heap()
+heap = jheaps.create_addressable_fibonacci_heap()
 
 # %%
 # Adding elements can be performed using insert. We next add an element with key 

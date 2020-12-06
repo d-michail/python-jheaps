@@ -131,7 +131,7 @@ class _DoubleLongAddressableHeap(_BaseAddressableHeap):
     def __init__(self, handle, **kwargs):
         super().__init__(handle=handle, **kwargs)
 
-    def insert(self, key, value=0):
+    def insert(self, key, value):
         res = backend.jheaps_AHeap_D_insert_key_value(self._handle, key, value)
         return _DoubleLongAddressableHeapHandle(res)
 
@@ -157,7 +157,7 @@ class _DoubleEndedDoubleLongAddressableHeap(
     def __init__(self, handle, **kwargs):
         super().__init__(handle=handle, **kwargs)
 
-    def insert(self, key, value=0):
+    def insert(self, key, value):
         res = backend.jheaps_AHeap_D_insert_key_value(self._handle, key, value)
         return _DoubleEndedDoubleLongAddressableHeapHandle(res)
 
@@ -202,7 +202,7 @@ class _LongLongAddressableHeap(_BaseAddressableHeap):
     def __init__(self, handle, **kwargs):
         super().__init__(handle=handle, **kwargs)
 
-    def insert(self, key, value=0):
+    def insert(self, key, value):
         res = backend.jheaps_AHeap_L_insert_key_value(self._handle, key, value)
         return _LongLongAddressableHeapHandle(res)
 
@@ -228,7 +228,7 @@ class _DoubleEndedLongLongAddressableHeap(
     def __init__(self, handle, **kwargs):
         super().__init__(handle=handle, **kwargs)
 
-    def insert(self, key, value=0):
+    def insert(self, key, value):
         res = backend.jheaps_AHeap_L_insert_key_value(self._handle, key, value)
         return _DoubleEndedLongLongAddressableHeapHandle(res)
 
