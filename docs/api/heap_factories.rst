@@ -14,11 +14,13 @@ while classic heaps use the :py:class:`.Heap` interface and support only keys.
 Both keys and values (when applicable) can have different types. Native support and therefore 
 better performance is provided for `float` and `int` keys or values. All other types are 
 represented using `object` and thus entail additional overhead. When keys are objects, comparisons 
-are performed using `__lt__` and `__eq__`.
+are performed using `__lt__` and `__eq__`.  Note that `float` and `int` are translated to 
+`double` and `long long` in the backend which means that they do not use arbitrary precision
+arithmetic. Use `object` in order to handle arbitrary keys and values.
 
 Additionally several addressable heaps are also mergeable heaps following the 
 :py:class:`.Mergeable` interface and thus efficiently support melding with another heap. Note, however,
-that after a meld one of the two heaps becomes unusable. Additionally, performing cascading melds 
+that after a meld one of the two heaps becomes unusable. Finally, performing cascading melds 
 although efficient due to the use of union-find with path compression, invalidates the claimed bounds.
 
 AddressableHeaps

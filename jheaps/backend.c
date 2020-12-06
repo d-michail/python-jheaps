@@ -203,11 +203,6 @@ int jheaps_handles_destroy(void *handle) {
     return jheaps_capi_handles_destroy(thread, handle);
 }
 
-int jheaps_handles_get_ccharpointer(void *handle, char** res) { 
-    LAZY_THREAD_ATTACH
-    return jheaps_capi_handles_get_ccharpointer(thread, handle, res);
-}
-
 int jheaps_Heap_create(heap_type_t type, void** res) { 
     LAZY_THREAD_ATTACH
     return jheaps_capi_Heap_create(thread, type, res);

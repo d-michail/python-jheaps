@@ -42,6 +42,8 @@ from ._utils import (
     _create_wrapped_id_comparator_callback,
 )
 
+import ctypes
+
 
 def _wrap_heap(
     handle,
@@ -55,7 +57,9 @@ def _wrap_heap(
     if addressable:
         if double_ended:
             if mergeable:
-                raise ValueError('Double-ended and mergeable not supported at the same time')
+                raise ValueError(
+                    "Double-ended and mergeable not supported at the same time"
+                )
             else:
                 if key_type == float:
                     if value_type == int:
@@ -69,9 +73,13 @@ def _wrap_heap(
                         return _DoubleEndedLongAnyAddressableHeap(handle)
                 else:
                     if value_type == int:
-                        return _DoubleEndedAnyLongAddressableHeap(handle, comparator=comparator)
+                        return _DoubleEndedAnyLongAddressableHeap(
+                            handle, comparator=comparator
+                        )
                     else:
-                        return _DoubleEndedAnyAnyAddressableHeap(handle, comparator=comparator)
+                        return _DoubleEndedAnyAnyAddressableHeap(
+                            handle, comparator=comparator
+                        )
         else:
             if mergeable:
                 if key_type == float:

@@ -98,7 +98,6 @@ def create_implicit_dary_heap(key_type=float, d=4):
         double_ended=False,
     )
 
-
 def create_implicit_weak_binary_heap(key_type=float, bulk_insert=False):
     """Create an implicit (array-based) weak binary heap.
 
