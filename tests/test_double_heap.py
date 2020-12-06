@@ -56,7 +56,7 @@ def test_sort_with_heap():
 
     heap = create_addressable_pairing_heap()
     for n in numbers: 
-        heap.insert(n)
+        heap.insert(n, 0)
 
     sorted_numbers = []
     while len(heap) != 0:
