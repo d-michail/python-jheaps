@@ -255,23 +255,21 @@ int jheaps_DEHeap_L_delete_max(void *, long long* OUTPUT);
 
 int jheaps_handles_destroy(void *);
 
-int jheaps_handles_get_ccharpointer(void *, char** OUTPUT);
+int jheaps_Heap_create(heap_type_t, void** OUTPUT);
 
-int jheaps_heap_create(heap_type_t, void** OUTPUT);
+int jheaps_dary_Heap_create(heap_type_t, int, void** OUTPUT);
 
-int jheaps_dary_heap_create(heap_type_t, int, void** OUTPUT);
+int jheaps_soft_Heap_create(heap_type_t, double, void** OUTPUT);
 
-int jheaps_soft_heap_create(heap_type_t, double, void** OUTPUT);
+int jheaps_double_radix_Heap_create(heap_type_t, double, double, void** OUTPUT);
 
-int jheaps_double_radix_heap_create(heap_type_t, double, double, void** OUTPUT);
+int jheaps_long_radix_Heap_create(heap_type_t, long long int, long long int, void** OUTPUT);
 
-int jheaps_long_radix_heap_create(heap_type_t, long long int, long long int, void** OUTPUT);
+int jheaps_Heap_comparator_create(heap_type_t, void *LONG_TO_FPTR, void** OUTPUT);
 
-int jheaps_heap_comparator_create(heap_type_t, void *LONG_TO_FPTR, void** OUTPUT);
+int jheaps_dary_Heap_comparator_create(heap_type_t, void *LONG_TO_FPTR, int, void** OUTPUT);
 
-int jheaps_dary_heap_comparator_create(heap_type_t, void *LONG_TO_FPTR, int, void** OUTPUT);
-
-int jheaps_soft_heap_comparator_create(heap_type_t, void *LONG_TO_FPTR, double, void** OUTPUT);
+int jheaps_soft_Heap_comparator_create(heap_type_t, void *LONG_TO_FPTR, double, void** OUTPUT);
 
 int jheaps_Heap_D_insert_key(void *, double);
 

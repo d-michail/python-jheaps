@@ -80,23 +80,21 @@ int jheaps_DEHeap_L_delete_max(void *, long long*);
 
 int jheaps_handles_destroy(void *);
 
-int jheaps_handles_get_ccharpointer(void *, char**);
+int jheaps_Heap_create(heap_type_t, void**);
 
-int jheaps_heap_create(heap_type_t, void**);
+int jheaps_dary_Heap_create(heap_type_t, int, void**);
 
-int jheaps_dary_heap_create(heap_type_t, int, void**);
+int jheaps_soft_Heap_create(heap_type_t, double, void**);
 
-int jheaps_soft_heap_create(heap_type_t, double, void**);
+int jheaps_double_radix_Heap_create(heap_type_t, double, double, void**);
 
-int jheaps_double_radix_heap_create(heap_type_t, double, double, void**);
+int jheaps_long_radix_Heap_create(heap_type_t, long long int, long long int, void**);
 
-int jheaps_long_radix_heap_create(heap_type_t, long long int, long long int, void**);
+int jheaps_Heap_comparator_create(heap_type_t, void *, void**);
 
-int jheaps_heap_comparator_create(heap_type_t, void *, void**);
+int jheaps_dary_Heap_comparator_create(heap_type_t, void *, int, void**);
 
-int jheaps_dary_heap_comparator_create(heap_type_t, void *, int, void**);
-
-int jheaps_soft_heap_comparator_create(heap_type_t, void *, double, void**);
+int jheaps_soft_Heap_comparator_create(heap_type_t, void *, double, void**);
 
 int jheaps_Heap_D_insert_key(void *, double);
 

@@ -208,44 +208,44 @@ int jheaps_handles_get_ccharpointer(void *handle, char** res) {
     return jheaps_capi_handles_get_ccharpointer(thread, handle, res);
 }
 
-int jheaps_heap_create(heap_type_t type, void** res) { 
+int jheaps_Heap_create(heap_type_t type, void** res) { 
     LAZY_THREAD_ATTACH
-    return jheaps_capi_heap_create(thread, type, res);
+    return jheaps_capi_Heap_create(thread, type, res);
 }
 
-int jheaps_dary_heap_create(heap_type_t type, int d, void** res) { 
+int jheaps_dary_Heap_create(heap_type_t type, int d, void** res) { 
     LAZY_THREAD_ATTACH
-    return jheaps_capi_dary_heap_create(thread, type, d, res);
+    return jheaps_capi_dary_Heap_create(thread, type, d, res);
 }
 
-int jheaps_soft_heap_create(heap_type_t type, double error_rate, void** res) { 
+int jheaps_soft_Heap_create(heap_type_t type, double error_rate, void** res) { 
     LAZY_THREAD_ATTACH
-    return jheaps_capi_soft_heap_create(thread, type, error_rate, res);
+    return jheaps_capi_soft_Heap_create(thread, type, error_rate, res);
 }
 
-int jheaps_double_radix_heap_create(heap_type_t type, double min_key, double max_key, void** res) { 
+int jheaps_double_radix_Heap_create(heap_type_t type, double min_key, double max_key, void** res) { 
     LAZY_THREAD_ATTACH
-    return jheaps_capi_double_radix_heap_create(thread, type, min_key, max_key, res);
+    return jheaps_capi_double_radix_Heap_create(thread, type, min_key, max_key, res);
 }
 
-int jheaps_long_radix_heap_create(heap_type_t type, long long int min_key, long long int max_key, void** res) { 
+int jheaps_long_radix_Heap_create(heap_type_t type, long long int min_key, long long int max_key, void** res) { 
     LAZY_THREAD_ATTACH
-    return jheaps_capi_long_radix_heap_create(thread, type, min_key, max_key, res);
+    return jheaps_capi_long_radix_Heap_create(thread, type, min_key, max_key, res);
 }
 
-int jheaps_heap_comparator_create(heap_type_t type, void *comparator, void** res) { 
+int jheaps_Heap_comparator_create(heap_type_t type, void *comparator, void** res) { 
     LAZY_THREAD_ATTACH
-    return jheaps_capi_heap_comparator_create(thread, type, comparator, res);
+    return jheaps_capi_Heap_comparator_create(thread, type, comparator, res);
 }
 
-int jheaps_dary_heap_comparator_create(heap_type_t type, void *comparator, int d, void** res) { 
+int jheaps_dary_Heap_comparator_create(heap_type_t type, void *comparator, int d, void** res) { 
     LAZY_THREAD_ATTACH
-    return jheaps_capi_dary_heap_comparator_create(thread, type, comparator, d, res);
+    return jheaps_capi_dary_Heap_comparator_create(thread, type, comparator, d, res);
 }
 
-int jheaps_soft_heap_comparator_create(heap_type_t type, void *comparator, double error_rate, void** res) { 
+int jheaps_soft_Heap_comparator_create(heap_type_t type, void *comparator, double error_rate, void** res) { 
     LAZY_THREAD_ATTACH
-    return jheaps_capi_soft_heap_comparator_create(thread, type, comparator, error_rate, res);
+    return jheaps_capi_soft_Heap_comparator_create(thread, type, comparator, error_rate, res);
 }
 
 int jheaps_Heap_D_insert_key(void *heap, double key) { 
