@@ -139,7 +139,7 @@ def _create_and_wrap_heap(
 ):
     if key_type != int and key_type != float:
         f_ptr, f = _create_wrapped_id_comparator_callback(_id_comparator)
-        handle = backend.jheaps_heap_comparator_create(heap_type.value, f_ptr)
+        handle = backend.jheaps_Heap_comparator_create(heap_type.value, f_ptr)
         return _wrap_heap(
             handle,
             key_type,
@@ -150,7 +150,7 @@ def _create_and_wrap_heap(
             double_ended=double_ended,
         )
     else:
-        handle = backend.jheaps_heap_create(heap_type.value)
+        handle = backend.jheaps_Heap_create(heap_type.value)
         return _wrap_heap(
             handle,
             key_type,
@@ -166,7 +166,7 @@ def _create_and_wrap_dary_heap(
 ):
     if key_type != int and key_type != float:
         f_ptr, f = _create_wrapped_id_comparator_callback(_id_comparator)
-        handle = backend.jheaps_dary_heap_comparator_create(heap_type.value, f_ptr, d)
+        handle = backend.jheaps_dary_Heap_comparator_create(heap_type.value, f_ptr, d)
         return _wrap_heap(
             handle,
             key_type,
@@ -177,7 +177,7 @@ def _create_and_wrap_dary_heap(
             double_ended=double_ended,
         )
     else:
-        handle = backend.jheaps_dary_heap_create(heap_type.value, d)
+        handle = backend.jheaps_dary_Heap_create(heap_type.value, d)
         return _wrap_heap(
             handle,
             key_type,
@@ -192,7 +192,7 @@ def _create_and_wrap_radix_heap(
     heap_type, min, max, key_type, value_type, addressable, mergeable, double_ended
 ):
     if key_type == float:
-        handle = backend.jheaps_double_radix_heap_create(heap_type, min, max)
+        handle = backend.jheaps_double_radix_Heap_create(heap_type, min, max)
         return _wrap_heap(
             handle,
             key_type,
@@ -202,7 +202,7 @@ def _create_and_wrap_radix_heap(
             double_ended=double_ended,
         )
     elif key_type == int:
-        handle = backend.jheaps_long_radix_heap_create(heap_type, min, max)
+        handle = backend.jheaps_long_radix_Heap_create(heap_type, min, max)
         return _wrap_heap(
             handle,
             key_type,
