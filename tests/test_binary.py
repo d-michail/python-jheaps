@@ -140,7 +140,7 @@ def test_sort_with_double_addressable_binary_heap():
 
     heap = create_addressable_binary_heap(explicit=True, key_type=float, value_type=int)
     for n in numbers: 
-        heap.insert(n)
+        heap.insert(n, 0)
 
     sorted_numbers = []
     while len(heap) != 0:
