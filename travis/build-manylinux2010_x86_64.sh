@@ -4,14 +4,17 @@ set -e -x
 # zlib-devel is needed for compiling libjheaps_capi.so
 # pcre-devel is needed for compiling SWIG
 yum install -y zlib-devel pcre-devel
-# Install CMake from PyPI which provides a pre-compiled binary
-/opt/python/cp38-cp38/bin/pip install cmake
 
+# Install CMake from PyPI which provides a pre-compiled binary
+for PYBIN in /opt/python/cp3{6..8}*/bin; do
+    "${PYBIN}/pip" install --upgrade pip
+    "${PYBIN}/pip" install cmake
+done
 
 # Install GraalVM and native-image
-curl -LO https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-20.0.0/graalvm-ce-java11-linux-amd64-20.0.0.tar.gz
-tar xzf graalvm-ce-java11-linux-amd64-20.0.0.tar.gz -C /opt/
-export PATH="/opt/graalvm-ce-java11-20.0.0/bin:$PATH"
+curl -LO https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-20.3.0/graalvm-ce-java11-linux-amd64-20.3.0.tar.gz
+tar xzf graalvm-ce-java11-linux-amd64-20.3.0.tar.gz -C /opt/
+export PATH="/opt/graalvm-ce-java11-20.3.0/bin:$PATH"
 gu install native-image
 
 # Install Maven
