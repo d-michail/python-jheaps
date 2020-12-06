@@ -13,6 +13,9 @@ jobs:
         - ls -l dist/
     - os: osx
       language: shell
+      cache:
+        directories:
+          - $HOME/Library/Caches/Homebrew
       sudo: required
       install:
         - brew cask install graalvm/tap/graalvm-ce-java11
