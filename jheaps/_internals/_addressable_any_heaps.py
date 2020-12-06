@@ -491,7 +491,9 @@ class _AnyLongAddressableHeap(_BaseAnyAddressableHeap):
         super().__init__(handle=handle, **kwargs)
         self._comparator = comparator
 
-    def insert(self, key, value):
+    def insert(self, key, value=None):
+        if value is None:
+            value = int()
         _inc_ref(key)
         res = backend.jheaps_AHeap_L_insert_key_value(self._handle, id(key), value)
         return _AnyLongAddressableHeapHandle(res)
@@ -527,7 +529,9 @@ class _DoubleEndedAnyLongAddressableHeap(
         super().__init__(handle=handle, **kwargs)
         self._comparator = comparator
 
-    def insert(self, key, value):
+    def insert(self, key, value=None):
+        if value is None:
+            value = int()
         _inc_ref(key)
         res = backend.jheaps_AHeap_L_insert_key_value(self._handle, id(key), value)
         return _DoubleEndedAnyLongAddressableHeapHandle(res)
