@@ -293,6 +293,30 @@ int jheaps_Heap_clear(void *heap) {
     return jheaps_capi_Heap_clear(thread, heap);
 }
 
+int jheaps_Heap_D_heapify(heap_type_t type, double* keys, long long* values, int count, void** res) { 
+    return jheaps_capi_Heap_D_heapify(thread, type, keys, values, count, res);
+}
+
+int jheaps_Heap_L_heapify(heap_type_t type, long long* keys, long long* values, int count, void** res) {
+    return jheaps_capi_Heap_L_heapify(thread, type, keys, values, count, res);
+}
+
+int jheaps_dary_Heap_D_heapify(heap_type_t type, int d, double* keys, long long* values, int count, void** res) {
+    return jheaps_capi_dary_Heap_D_heapify(thread, type, d, keys, values, count, res);
+}
+
+int jheaps_dary_Heap_L_heapify(heap_type_t type, int d, long long* keys, long long* values, int count, void** res) {
+    return jheaps_capi_dary_Heap_L_heapify(thread, type, d, keys, values, count, res);
+}
+
+int jheaps_Heap_L_comparator_heapify(heap_type_t type, void *comparator, long long* keys, long long* values, int count, void** res) {
+    return jheaps_capi_Heap_L_comparator_heapify(thread, type, comparator, keys, values, count, res);
+}
+
+int jheaps_dary_Heap_L_comparator_heapify(heap_type_t type, void *comparator, int d, long long* keys, long long* values, int count, void** res) {
+    return jheaps_capi_dary_Heap_L_comparator_heapify(thread, type, comparator, d, keys, values, count, res);
+}
+
 int jheaps_MAHeap_D_meld(void *heap1, void *heap2) { 
     LAZY_THREAD_ATTACH
     return jheaps_capi_MAHeap_D_meld(thread, heap1, heap2);

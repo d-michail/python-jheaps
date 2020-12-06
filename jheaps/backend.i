@@ -289,6 +289,18 @@ int jheaps_Heap_isempty(void *, int* OUTPUT);
 
 int jheaps_Heap_clear(void *);
 
+int jheaps_Heap_D_heapify(heap_type_t, double*, long long*, int, void** OUTPUT);
+
+int jheaps_Heap_L_heapify(heap_type_t, long long*, long long*, int, void** OUTPUT);
+
+int jheaps_dary_Heap_D_heapify(heap_type_t, int, double*, long long*, int, void** OUTPUT);
+
+int jheaps_dary_Heap_L_heapify(heap_type_t, int, long long*, long long*, int, void** OUTPUT);
+
+int jheaps_Heap_L_comparator_heapify(heap_type_t, void *LONG_TO_FPTR, long long*, long long*, int, void** OUTPUT);
+
+int jheaps_dary_Heap_L_comparator_heapify(heap_type_t, void *LONG_TO_FPTR, int, long long*, long long*, int, void** OUTPUT);
+
 int jheaps_MAHeap_D_meld(void *, void *);
 
 int jheaps_MAHeap_L_meld(void *, void *);
