@@ -5,11 +5,10 @@ set -e -x
 # pcre-devel is needed for compiling SWIG
 yum install -y zlib-devel pcre-devel
 
-# Install CMake from PyPI which provides a pre-compiled binary
-for PYBIN in /opt/python/cp3{6..8}*/bin; do
-    "${PYBIN}/pip" install --upgrade pip
-    "${PYBIN}/pip" install cmake
-done
+# Install CMake
+curl -LO https://github.com/Kitware/CMake/releases/download/v3.19.1/cmake-3.19.1-Linux-x86_64.sh
+sh cmake-3.19.1-Linux-x86_64.sh --skip-license --prefix=/opt --include-subdir
+export PATH="/opt/cmake-3.19.1-Linux-x86_64/bin:$PATH"
 
 # Install GraalVM and native-image
 curl -LO https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-20.3.0/graalvm-ce-java11-linux-amd64-20.3.0.tar.gz
