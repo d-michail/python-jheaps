@@ -17,24 +17,30 @@ from ._addressable_heaps import (
     _DoubleLongAddressableHeap,
     _DoubleEndedDoubleLongAddressableHeap,
     _DoubleLongMergeableAddressableHeap,
+    _DoubleEndedDoubleLongMergeableAddressableHeap,
     _LongLongAddressableHeap,
     _DoubleEndedLongLongAddressableHeap,
     _LongLongMergeableAddressableHeap,
+    _DoubleEndedLongLongMergeableAddressableHeap,
 )
 
 from ._addressable_any_heaps import (
     _DoubleAnyAddressableHeap,
     _DoubleEndedDoubleAnyAddressableHeap,
     _DoubleAnyMergeableAddressableHeap,
+    _DoubleEndedDoubleAnyMergeableAddressableHeap,
     _LongAnyAddressableHeap,
     _DoubleEndedLongAnyAddressableHeap,
     _LongAnyMergeableAddressableHeap,
+    _DoubleEndedLongAnyMergeableAddressableHeap,
     _AnyLongAddressableHeap,
     _DoubleEndedAnyLongAddressableHeap,
     _AnyLongMergeableAddressableHeap,
+    _DoubleEndedAnyLongMergeableAddressableHeap,
     _AnyAnyAddressableHeap,
     _DoubleEndedAnyAnyAddressableHeap,
     _AnyAnyMergeableAddressableHeap,
+    _DoubleEndedAnyAnyMergeableAddressableHeap,
 )
 
 from ._utils import (
@@ -57,9 +63,25 @@ def _wrap_heap(
     if addressable:
         if double_ended:
             if mergeable:
-                raise ValueError(
-                    "Double-ended and mergeable not supported at the same time"
-                )
+                if key_type == float:
+                    if value_type == int:
+                        return _DoubleEndedDoubleLongMergeableAddressableHeap(handle)
+                    else:
+                        return _DoubleEndedDoubleAnyMergeableAddressableHeap(handle)
+                elif key_type == int:
+                    if value_type == int:
+                        return _DoubleEndedLongLongMergeableAddressableHeap(handle)
+                    else:
+                        return _DoubleEndedLongAnyMergeableAddressableHeap(handle)
+                else:
+                    if value_type == int:
+                        return _DoubleEndedAnyLongMergeableAddressableHeap(
+                            handle, comparator=comparator
+                        )
+                    else:
+                        return _DoubleEndedAnyAnyMergeableAddressableHeap(
+                            handle, comparator=comparator
+                        )
             else:
                 if key_type == float:
                     if value_type == int:

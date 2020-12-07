@@ -209,7 +209,7 @@ def create_doubleended_addressable_fibonacci_heap(key_type=float, value_type=int
         key_type,
         value_type,
         addressable=True,
-        mergeable=False,
+        mergeable=True,
         double_ended=True,
     )
     pass
@@ -266,7 +266,7 @@ def create_doubleended_addressable_pairing_heap(
         key_type,
         value_type,
         addressable=True,
-        mergeable=False,
+        mergeable=True,
         double_ended=True,
     )
 

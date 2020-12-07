@@ -198,6 +198,19 @@ class _DoubleLongMergeableAddressableHeap(_DoubleLongAddressableHeap, MergeableH
         return "_DoubleLongMergeableAddressableHeap(%r)" % self._handle
 
 
+class _DoubleEndedDoubleLongMergeableAddressableHeap(_DoubleEndedDoubleLongAddressableHeap, MergeableHeap):
+    """A double ended mergable and addressable heap with double keys and long values."""
+
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+
+    def meld(self, other):
+        backend.jheaps_MDEAHeap_D_meld(self._handle, other._handle)
+
+    def __repr__(self):
+        return "_DoubleEndedDoubleLongMergeableAddressableHeap(%r)" % self._handle
+
+
 class _LongLongAddressableHeap(_BaseAddressableHeap):
     """A Heap with long keys and long values. All operations are delegated
     to the backend.
@@ -271,3 +284,16 @@ class _LongLongMergeableAddressableHeap(_LongLongAddressableHeap, MergeableHeap)
 
     def __repr__(self):
         return "_LongLongMergeableAddressableHeap(%r)" % self._handle
+
+
+class _DoubleEndedLongLongMergeableAddressableHeap(_DoubleEndedLongLongAddressableHeap, MergeableHeap):
+    """A double ended mergable and addressable heap with long keys and long values."""
+
+    def __init__(self, handle, **kwargs):
+        super().__init__(handle=handle, **kwargs)
+
+    def meld(self, other):
+        backend.jheaps_MDEAHeap_L_meld(self._handle, other._handle)
+
+    def __repr__(self):
+        return "_DoubleEndedLongLongMergeableAddressableHeap(%r)" % self._handle
