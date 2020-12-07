@@ -2,7 +2,7 @@
 
 # Python-JHeaps
 
-Python bindings for the  [JHeaps library](https://jheaps.org/).
+Python bindings for the  [JHeaps library](https://www.jheaps.org/).
 
 The JHeaps is a free Java library that provides various heap implementations.
 
