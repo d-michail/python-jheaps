@@ -1,7 +1,7 @@
 __title__ = "JHeaps"
 __description__ = "JHeaps library"
 __url__ = "https://github.com/d-michail/python-jheaps"
-__version__ = "0.14.0.dev"
+__version__ = "0.14.0"
 __backend_version__ = "0.14"
 __author__ = "Dimitrios Michail"
 __author_email__ = "dimitrios.michail@gmail.com"
