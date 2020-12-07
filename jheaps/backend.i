@@ -305,3 +305,6 @@ int jheaps_MAHeap_D_meld(void *, void *);
 
 int jheaps_MAHeap_L_meld(void *, void *);
 
+int jheaps_MDEAHeap_D_meld(void *, void *);
+
+int jheaps_MDEAHeap_L_meld(void *, void *);

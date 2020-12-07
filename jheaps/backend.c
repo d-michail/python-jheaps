@@ -322,4 +322,14 @@ int jheaps_MAHeap_L_meld(void *heap1, void *heap2) {
     return jheaps_capi_MAHeap_L_meld(thread, heap1, heap2);
 }
 
+int jheaps_MDEAHeap_D_meld(void *heap1, void *heap2) { 
+    LAZY_THREAD_ATTACH
+    return jheaps_capi_MDEAHeap_D_meld(thread, heap1, heap2);
+}
+
+int jheaps_MDEAHeap_L_meld(void *heap1, void *heap2) { 
+    LAZY_THREAD_ATTACH
+    return jheaps_capi_MDEAHeap_L_meld(thread, heap1, heap2);
+}
+
 
