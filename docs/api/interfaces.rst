@@ -34,7 +34,7 @@ Most addressable heaps are also mergeable.
 DoubleEndedAddressableHeap
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The library also contains a few double ended addressable heaps.
+The library also contains a few double ended addressable heaps which are also mergeable.
 
 .. autoclass:: jheaps.types.DoubleEndedAddressableHeap
    :inherited-members:
@@ -57,7 +57,7 @@ interface, values are not supported.
 DoubleEndedHeap
 ^^^^^^^^^^^^^^^
 
-Support is also provided for double ended heaps.
+Support is also provided for double ended heaps (minmax).
 
 .. autoclass:: jheaps.types.DoubleEndedHeap
    :inherited-members:

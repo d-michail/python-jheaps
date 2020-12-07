@@ -198,7 +198,7 @@ def create_doubleended_addressable_fibonacci_heap(key_type=float, value_type=int
     :param value_type: the value type
     :type value_type: float, int or object
     :returns: the heap
-    :rtype: :py:class:`.DoubleEndedAddressableHeap`
+    :rtype: :py:class:`.DoubleEndedAddressableHeap` and :py:class:`.MergeableHeap`
     """
     heap_type = (
         _HeapType.HEAP_TYPE_DOUBLEENDED_MERGEABLE_ADDRESSABLE_FIBONACCI_REFLECTED
@@ -229,7 +229,7 @@ def create_addressable_fibonacci_heap(
     :param simple: if true then the simple variant is returned, otherwise the classic
     :type simple: boolean
     :returns: the heap
-    :rtype: :py:class:`.AddressableHeap`
+    :rtype: :py:class:`.AddressableHeap` and :py:class:`.MergeableHeap`
     """
     heap_type = (
         _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_FIBONACCI_SIMPLE
@@ -257,7 +257,7 @@ def create_doubleended_addressable_pairing_heap(
     :param value_type: the value type
     :type value_type: float, int or object
     :returns: the heap
-    :rtype: :py:class:`.DoubleEndedAddressableHeap`
+    :rtype: :py:class:`.DoubleEndedAddressableHeap` and :py:class:`.MergeableHeap`    
     """
     heap_type = _HeapType.HEAP_TYPE_DOUBLEENDED_MERGEABLE_ADDRESSABLE_PAIRING_REFLECTED
 
@@ -284,7 +284,7 @@ def create_addressable_pairing_heap(
     :param type: the type of pairing heap to create
     :type type: None, 'rank' or 'costless_meld'
     :returns: the heap
-    :rtype: :py:class:`.AddressableHeap`
+    :rtype: :py:class:`.AddressableHeap` and :py:class:`.MergeableHeap`
     """
     if type == 'rank':
         heap_type = _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_PAIRING_RANK
@@ -311,7 +311,7 @@ def create_addressable_hollow_heap(key_type=float, value_type=int):
     :param value_type: the value type
     :type value_type: float, int or object
     :returns: the heap
-    :rtype: :py:class:`.AddressableHeap`
+    :rtype: :py:class:`.AddressableHeap` and :py:class:`.MergeableHeap`
     """
     heap_type = _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_HOLLOW
 
@@ -333,7 +333,7 @@ def create_addressable_leftist_heap(key_type=float, value_type=int):
     :param value_type: the value type
     :type value_type: float, int or object
     :returns: the heap
-    :rtype: :py:class:`.AddressableHeap`
+    :rtype: :py:class:`.AddressableHeap` and :py:class:`.MergeableHeap`
     """
     heap_type = _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_LEFTIST
 
@@ -355,7 +355,7 @@ def create_addressable_skew_heap(key_type=float, value_type=int):
     :param value_type: the value type
     :type value_type: float, int or object
     :returns: the heap
-    :rtype: :py:class:`.AddressableHeap`
+    :rtype: :py:class:`.AddressableHeap` and :py:class:`.MergeableHeap`
     """
     heap_type = _HeapType.HEAP_TYPE_MERGEABLE_ADDRESSABLE_SKEW
 
