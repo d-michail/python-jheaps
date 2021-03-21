@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/d-michail/python-jheaps.svg?branch=master)](https://travis-ci.org/d-michail/python-jheaps)
+[![Python JHeaps](https://github.com/d-michail/python-jheaps/actions/workflows/master.yml/badge.svg)](https://github.com/d-michail/python-jheaps/actions/workflows/master.yml)
 
 # Python-JHeaps
 
