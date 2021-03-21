@@ -21,7 +21,7 @@ jobs:
         ls $GITHUB_WORKSPACE
     - name: Clone repository
       run: |
-        git clone --recursive https://github.com/d-michail/python-jheaps.git $GITHUB_WORKSPACE/../python-jheaps
+        git clone --recursive --branch actions https://github.com/d-michail/python-jheaps.git $GITHUB_WORKSPACE/../python-jheaps
     - name: ls GITHUB_WORKSPACE
       run: |
         ls $GITHUB_WORKSPACE
