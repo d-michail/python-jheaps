@@ -16,6 +16,9 @@ jobs:
     - name: OS?
       run: | 
         uname -a
+    - name: ls GITHUB_WORKSPACE
+      run: |
+        ls $GITHUB_WORKSPACE
     - name: Clone repository
       run: |
         git clone --recursive https://github.com/d-michail/python-jheaps.git
@@ -24,9 +27,9 @@ jobs:
         ls
     - name: ls GITHUB_WORKSPACE
       run: |
-        ls $GITHUB_WORKSPACE    
+        ls $GITHUB_WORKSPACE/python-jheaps    
     - name: Build
-      run:  $GITHUB_WORKSPACE/python-jheaps/.github/scripts/build-manylinux2010_x86_64.sh
+      run:  $GITHUB_WORKSPACE/.github/scripts/build-manylinux2010_x86_64.sh
       shell: bash
 
   build-other:
