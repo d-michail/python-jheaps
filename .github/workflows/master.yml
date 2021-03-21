@@ -69,7 +69,7 @@ jobs:
     - name: Install swig (MacOS)
       if: runner.os == 'MacOS'
       run: |
-        brew install swig@4.0.1      
+        brew install swig
     - name: Install swig (Windows)
       if: runner.os == 'Windows'
       run: |
