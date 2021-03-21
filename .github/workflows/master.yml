@@ -44,3 +44,26 @@ jobs:
     - name: Display Python version
       run: |
         python -c "import sys; print(sys.version)"
+    - name: Setup GraalVM
+      if: runner.os == 'MacOS'
+      id: setup-graalvm
+      uses: DeLaGuardo/setup-graalvm@4.0
+      with:
+        graalvm: '21.0.0.2'
+        java: 'java11'
+        arch: 'amd64'
+    - name: Install native-image component
+      if: runner.os == 'MacOS'
+      run: |
+        ${{ matrix.config.gu }} install native-image
+    - name: Build Library
+      run: |
+        pip install wheel
+        python setup.py bdist_wheel
+    - name: Install and run tests
+      run: |
+        pip install -r requirements/test.txt
+        pip install jheaps --no-index -f dist/
+        pytest
+
+
