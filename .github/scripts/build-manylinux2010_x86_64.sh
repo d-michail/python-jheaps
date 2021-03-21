@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e -x
 
+mkdir /io
+cd /io
+git clone --recursive https://github.com/d-michail/python-jheaps.git
+cd python-jheaps
+
 # Build wheels for Python 3.6, 3.7, 3.8, 3.9
 # Although we have a manylinux compatible wheel generated directly from
 # setup.py, PyPI requires that the platform tag is set to a manylinux one
