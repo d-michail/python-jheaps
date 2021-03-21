@@ -1,8 +1,7 @@
 #!/bin/bash
 set -e -x
 
-mkdir /io
-cd /io
+cd $GITHUB_WORKSPACE
 git clone --recursive https://github.com/d-michail/python-jheaps.git
 cd python-jheaps
 
@@ -28,6 +27,6 @@ done
 # Install generated wheels and run the tests
 for PYBIN in /opt/python/cp3{6..8}*/bin; do
     "${PYBIN}/pip" install -r requirements/test.txt
-    "${PYBIN}/pip" install jheaps --no-index -f /io/dist
-    ("${PYBIN}/pytest")
+    "${PYBIN}/pip" install jheaps --no-index -f $GITHUB_WORKSPACE/dist
+    "${PYBIN}/pytest"
 done
