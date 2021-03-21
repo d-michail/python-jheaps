@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
     steps:
-    - name: OS?
+    - name: OS name
       run: | 
         uname -a
     - name: Clone repository
@@ -26,9 +26,12 @@ jobs:
     - name: Build
       run:  $GITHUB_WORKSPACE/.github/scripts/build-manylinux2010_x86_64.sh
       shell: bash
+   - name: list all wheels
+      run: |
+        ls $GITHUB_WORKSPACE/dist/*.whl
 
-  build-other:
-    if: false
+  build-non-linux:
+    #if: false
     runs-on: ${{ matrix.config.os }}
     strategy:
       fail-fast: false
