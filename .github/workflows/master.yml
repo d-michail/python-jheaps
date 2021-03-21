@@ -6,7 +6,24 @@ on:
       - actions
 
 jobs:
-  build:
+  build-linux:
+    runs-on: ubuntu-20.04
+    container:
+      image: dmichail/manylinux:ffb75cb3ba93612b26c4169988a49c50530e8ac4
+    strategy:
+      fail-fast: false
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: 'recursive'
+    - name: OS?
+      run: | 
+        uname -a
+    - name: Build
+      run: ./.github/scripts/build-manylinux2010_x86_64.sh
+      shell: bash
+
+  build-other:
     runs-on: ${{ matrix.config.os }}
     strategy:
       fail-fast: false
@@ -18,24 +35,24 @@ jobs:
             python-version: "3.9",
             gu: "gu.cmd",
           }        
-        - {
-            name: "Windows 2019 - MSVC",
-            os: windows-2019,
-            python-version: "3.8",
-            gu: "gu.cmd",
-          }
-        - {
-            name: "Windows 2019 - MSVC",
-            os: windows-2019,
-            python-version: "3.7",
-            gu: "gu.cmd",
-          }
-        - {
-            name: "Windows 2019 - MSVC",
-            os: windows-2019,
-            python-version: "3.6",
-            gu: "gu.cmd",
-          }
+          #- {
+          #    name: "Windows 2019 - MSVC",
+          #    os: windows-2019,
+          #    python-version: "3.8",
+          #    gu: "gu.cmd",
+          #  }
+          #- {
+          #    name: "Windows 2019 - MSVC",
+          #    os: windows-2019,
+          #    python-version: "3.7",
+          #    gu: "gu.cmd",
+          #  }
+          #- {
+          #    name: "Windows 2019 - MSVC",
+          #    os: windows-2019,
+          #    python-version: "3.6",
+          #    gu: "gu.cmd",
+          #  }
           #- {
           #  name: "MacOS 10.15",
           #  os: macos-10.15,
