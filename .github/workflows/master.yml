@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-linux:
-    if: false
+    #if: false
     runs-on: ubuntu-20.04
     container:
       image: dmichail/manylinux:1634888a5feacaf6c3b8e4d181d00fee57b390b4
@@ -28,6 +28,13 @@ jobs:
     - name: list all wheels
       run: |
         ls $GITHUB_WORKSPACE/dist/*.whl
+    - name: upload to PyPi
+      run:  $GITHUB_WORKSPACE/.github/scripts/upload-pypi.sh
+      shell: bash
+      env:
+        PYPI_USER: __token__
+        PYPI_PASSWORD: ${{ secrets.TEST_PYPI_API_TOKEN }}
+        #PYPI_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
 
   build-non-linux:
     #if: false
@@ -48,42 +55,42 @@ jobs:
             python-version: "3.8",
             gu: "gu.cmd",
           }
-#        - {
-#            name: "Windows 2019 - MSVC",
-#            os: windows-2019,
-#            python-version: "3.7",
-#            gu: "gu.cmd",
-#          }
-#        - {
-#            name: "Windows 2019 - MSVC",
-#            os: windows-2019,
-#            python-version: "3.6",
-#            gu: "gu.cmd",
-#          }
-#        - {
-#            name: "MacOS 10.15",
-#            os: macos-10.15,
-#            python-version: "3.9",
-#            gu: "gu"
-#          }
-#        - {
-#            name: "MacOS 10.15",
-#            os: macos-10.15,
-#            python-version: "3.8",
-#            gu: "gu"
-#          }
-#        - {
-#            name: "MacOS 10.15",
-#            os: macos-10.15,
-#            python-version: "3.7",
-#            gu: "gu"
-#          }
-#        - {
-#            name: "MacOS 10.15",
-#            os: macos-10.15,
-#            python-version: "3.6",
-#            gu: "gu"
-#          }
+        - {
+            name: "Windows 2019 - MSVC",
+            os: windows-2019,
+            python-version: "3.7",
+            gu: "gu.cmd",
+          }
+        - {
+            name: "Windows 2019 - MSVC",
+            os: windows-2019,
+            python-version: "3.6",
+            gu: "gu.cmd",
+          }
+        - {
+            name: "MacOS 10.15",
+            os: macos-10.15,
+            python-version: "3.9",
+            gu: "gu"
+          }
+        - {
+            name: "MacOS 10.15",
+            os: macos-10.15,
+            python-version: "3.8",
+            gu: "gu"
+          }
+        - {
+            name: "MacOS 10.15",
+            os: macos-10.15,
+            python-version: "3.7",
+            gu: "gu"
+          }
+        - {
+            name: "MacOS 10.15",
+            os: macos-10.15,
+            python-version: "3.6",
+            gu: "gu"
+          }
     steps:
     - uses: actions/checkout@v2
       with:
@@ -124,7 +131,7 @@ jobs:
         pip install jheaps --no-index -f dist/
         pytest
     - name: Upload wheel artifacts
-      #if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
+      if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
       uses: actions/upload-artifact@v2
       with:
         name: wheel-${{matrix.config.os}}-${{matrix.config.python-version}}-artifact
@@ -134,18 +141,18 @@ jobs:
   upload-pypi-non-linux:
     needs: build-non-linux  
     runs-on: ubuntu-20.04
-    #if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
     strategy:
       matrix:
         config: 
-        - {
-            os: windows-2019,
-            python-version: "3.9",
-          }        
-        - {
-            os: windows-2019,
-            python-version: "3.8",
-          }    
+        - { os: windows-2019, python-version: "3.9" }        
+        - { os: windows-2019, python-version: "3.8" }
+        - { os: windows-2019, python-version: "3.7" }
+        - { os: windows-2019, python-version: "3.6" }
+        - { os: macos-10.15,  python-version: "3.9" }
+        - { os: macos-10.15,  python-version: "3.8" }
+        - { os: macos-10.15,  python-version: "3.7" }
+        - { os: macos-10.15,  python-version: "3.6" }              
     steps:
     - name: Download artifacts
       uses: actions/download-artifact@v2
@@ -155,7 +162,7 @@ jobs:
     - name: List files
       run: ls -R
     - name: Upload to PyPi
-      #if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
+      if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
         user: __token__
