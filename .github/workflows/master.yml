@@ -38,7 +38,7 @@ jobs:
         #PYPI_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
 
   build-non-linux:
-    #if: false
+    if: false
     runs-on: ${{ matrix.config.os }}
     strategy:
       fail-fast: true
