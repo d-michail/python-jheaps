@@ -7,11 +7,10 @@ on:
 
 jobs:
   build-linux:
+    if: false
     runs-on: ubuntu-20.04
     container:
       image: dmichail/manylinux:1634888a5feacaf6c3b8e4d181d00fee57b390b4
-    strategy:
-      fail-fast: false
     steps:
     - name: OS name
       run: | 
@@ -34,7 +33,7 @@ jobs:
     #if: false
     runs-on: ${{ matrix.config.os }}
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         config: 
         - {
@@ -49,42 +48,42 @@ jobs:
             python-version: "3.8",
             gu: "gu.cmd",
           }
-        - {
-            name: "Windows 2019 - MSVC",
-            os: windows-2019,
-            python-version: "3.7",
-            gu: "gu.cmd",
-          }
-        - {
-            name: "Windows 2019 - MSVC",
-            os: windows-2019,
-            python-version: "3.6",
-            gu: "gu.cmd",
-          }
-        - {
-            name: "MacOS 10.15",
-            os: macos-10.15,
-            python-version: "3.9",
-            gu: "gu"
-          }
-        - {
-            name: "MacOS 10.15",
-            os: macos-10.15,
-            python-version: "3.8",
-            gu: "gu"
-          }
-        - {
-            name: "MacOS 10.15",
-            os: macos-10.15,
-            python-version: "3.7",
-            gu: "gu"
-          }
-        - {
-            name: "MacOS 10.15",
-            os: macos-10.15,
-            python-version: "3.6",
-            gu: "gu"
-          }
+#        - {
+#            name: "Windows 2019 - MSVC",
+#            os: windows-2019,
+#            python-version: "3.7",
+#            gu: "gu.cmd",
+#          }
+#        - {
+#            name: "Windows 2019 - MSVC",
+#            os: windows-2019,
+#            python-version: "3.6",
+#            gu: "gu.cmd",
+#          }
+#        - {
+#            name: "MacOS 10.15",
+#            os: macos-10.15,
+#            python-version: "3.9",
+#            gu: "gu"
+#          }
+#        - {
+#            name: "MacOS 10.15",
+#            os: macos-10.15,
+#            python-version: "3.8",
+#            gu: "gu"
+#          }
+#        - {
+#            name: "MacOS 10.15",
+#            os: macos-10.15,
+#            python-version: "3.7",
+#            gu: "gu"
+#          }
+#        - {
+#            name: "MacOS 10.15",
+#            os: macos-10.15,
+#            python-version: "3.6",
+#            gu: "gu"
+#          }
     steps:
     - uses: actions/checkout@v2
       with:
@@ -125,11 +124,25 @@ jobs:
         pip install jheaps --no-index -f dist/
         pytest
     - name: Upload wheel artifacts
+      #if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
       uses: actions/upload-artifact@v2
       with:
         name: wheel-${{runner.os}}-${{matrix.config.python-version}}-artifact
         path: dist/
         if-no-files-found: error
+
+  upload-pypi-non-linux:
+    needs: build-non-linux  
+    runs-on: ubuntu-20.04
+    #if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
+    steps:
+    - name: Upload artifacts
+      uses: actions/download-artifact@v2
+      with: 
+        path: dist
+    - name: List files
+      run: ls -R
+
 
         #    - name: Upload to PyPi
         #      if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
@@ -137,5 +150,4 @@ jobs:
         #      with:
         #        user: __token__
         #        password: ${{ secrets.PYPI_API_TOKEN }}
-
 
