@@ -21,13 +21,13 @@ jobs:
         ls $GITHUB_WORKSPACE
     - name: Clone repository
       run: |
-        git clone --recursive https://github.com/d-michail/python-jheaps.git
-    - name: ls
-      run: | 
-        ls
+        git clone --recursive https://github.com/d-michail/python-jheaps.git $GITHUB_WORKSPACE/../python-jheaps
     - name: ls GITHUB_WORKSPACE
       run: |
-        ls $GITHUB_WORKSPACE/python-jheaps    
+        ls $GITHUB_WORKSPACE
+    - name: cat GITHUB_WORKSPACE/.github/scripts/build-manylinux2010_x86_64.sh
+      run: |
+        cat GITHUB_WORKSPACE/.github/scripts/build-manylinux2010_x86_64.sh
     - name: Build
       run:  $GITHUB_WORKSPACE/.github/scripts/build-manylinux2010_x86_64.sh
       shell: bash
