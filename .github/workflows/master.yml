@@ -3,7 +3,7 @@ name: Python JHeaps
 on:
   push:
     branches:
-      - master
+      - actions
 
 jobs:
   build:
