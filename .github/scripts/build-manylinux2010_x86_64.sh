@@ -2,7 +2,7 @@
 set -e -x
 
 echo "Current dir: `pwd`"
-ls $GITHUB_WORKSPACE
+echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
 
 # Build wheels for Python 3.6, 3.7, 3.8, 3.9
 # Although we have a manylinux compatible wheel generated directly from
@@ -24,7 +24,7 @@ done
 /opt/python/cp38-cp38/bin/python setup.py sdist
 
 # Install generated wheels and run the tests
-for PYBIN in /opt/python/cp3{6..8}*/bin; do
+for PYBIN in /opt/python/cp3{6..9}*/bin; do
     "${PYBIN}/pip" install -r requirements/test.txt
     "${PYBIN}/pip" install jheaps --no-index -f $GITHUB_WORKSPACE/dist
     "${PYBIN}/pytest"
