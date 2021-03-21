@@ -15,22 +15,26 @@ jobs:
         - {
             name: "MacOS 10.15",
             os: macos-10.15,
-            python-version: "3.9"
+            python-version: "3.9",
+            gu: "gu"
           }
         - {
             name: "MacOS 10.15",
             os: macos-10.15,
-            python-version: "3.8"
+            python-version: "3.8",
+            gu: "gu"
           }
         - {
             name: "MacOS 10.15",
             os: macos-10.15,
-            python-version: "3.7"
+            python-version: "3.7",
+            gu: "gu"
           }
         - {
             name: "MacOS 10.15",
             os: macos-10.15,
-            python-version: "3.6"
+            python-version: "3.6",
+            gu: "gu"
           }
     steps:
     - uses: actions/checkout@v2
@@ -57,10 +61,12 @@ jobs:
       run: |
         ${{ matrix.config.gu }} install native-image
     - name: Build Library
+      if: runner.os == 'MacOS'
       run: |
         pip install wheel
         python setup.py bdist_wheel
     - name: Install and run tests
+      if: runner.os == 'MacOS'
       run: |
         pip install -r requirements/test.txt
         pip install jheaps --no-index -f dist/
