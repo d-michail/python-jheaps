@@ -18,7 +18,7 @@ jobs:
             python-version: "3.8",
             gu: "gu.cmd",
           }        
-          - {
+        - {
             name: "MacOS 10.15",
             os: macos-10.15,
             python-version: "3.9",
