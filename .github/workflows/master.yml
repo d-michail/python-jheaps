@@ -60,6 +60,10 @@ jobs:
       if: runner.os == 'MacOS'
       run: |
         ${{ matrix.config.gu }} install native-image
+    - name: Install swig
+      if: runner.os == 'MacOS'
+      run: |
+        brew install swig      
     - name: Build Library
       if: runner.os == 'MacOS'
       run: |
