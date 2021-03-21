@@ -13,29 +13,35 @@ jobs:
       matrix:
         config: 
         - {
+            name: "Windows 2019 - MSVC",
+            os: windows-2019,
+            python-version: "3.8",
+            gu: "gu.cmd",
+          }        
+          - {
             name: "MacOS 10.15",
             os: macos-10.15,
             python-version: "3.9",
             gu: "gu"
           }
-        - {
-            name: "MacOS 10.15",
-            os: macos-10.15,
-            python-version: "3.8",
-            gu: "gu"
-          }
-        - {
-            name: "MacOS 10.15",
-            os: macos-10.15,
-            python-version: "3.7",
-            gu: "gu"
-          }
-        - {
-            name: "MacOS 10.15",
-            os: macos-10.15,
-            python-version: "3.6",
-            gu: "gu"
-          }
+          #        - {
+          #            name: "MacOS 10.15",
+          #            os: macos-10.15,
+          #            python-version: "3.8",
+          #            gu: "gu"
+          #          }
+          #        - {
+          #            name: "MacOS 10.15",
+          #            os: macos-10.15,
+          #            python-version: "3.7",
+          #            gu: "gu"
+          #          }
+          #        - {
+          #            name: "MacOS 10.15",
+          #            os: macos-10.15,
+          #            python-version: "3.6",
+          #            gu: "gu"
+          #          }
     steps:
     - uses: actions/checkout@v2
       with:
@@ -49,7 +55,7 @@ jobs:
       run: |
         python -c "import sys; print(sys.version)"
     - name: Setup GraalVM
-      if: runner.os == 'MacOS'
+      if: runner.os == 'MacOS' || runner.os == 'Windows'
       id: setup-graalvm
       uses: DeLaGuardo/setup-graalvm@4.0
       with:
@@ -57,20 +63,24 @@ jobs:
         java: 'java11'
         arch: 'amd64'
     - name: Install native-image component
-      if: runner.os == 'MacOS'
+      if: runner.os == 'MacOS' || runner.os == 'Windows'
       run: |
         ${{ matrix.config.gu }} install native-image
-    - name: Install swig
+    - name: Install swig (MacOS)
       if: runner.os == 'MacOS'
       run: |
-        brew install swig      
+        brew install swig@4.0.1      
+    - name: Install swig (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        choco install swig --version=4.0.1
     - name: Build Library
-      if: runner.os == 'MacOS'
+      if: runner.os == 'MacOS' || runner.os == 'Windows'
       run: |
         pip install wheel
         python setup.py bdist_wheel
     - name: Install and run tests
-      if: runner.os == 'MacOS'
+      if: runner.os == 'MacOS' || runner.os == 'Windows'
       run: |
         pip install -r requirements/test.txt
         pip install jheaps --no-index -f dist/
