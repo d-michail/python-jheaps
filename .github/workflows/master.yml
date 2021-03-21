@@ -16,8 +16,11 @@ jobs:
     - name: OS?
       run: | 
         uname -a
+    - name: Clone repository
+      run: |
+        git clone --recursive https://github.com/d-michail/python-jheaps.git
     - name: Build
-      run: ./.github/scripts/build-manylinux2010_x86_64.sh
+      run: python-jheaps/.github/scripts/build-manylinux2010_x86_64.sh
       shell: bash
 
   build-other:

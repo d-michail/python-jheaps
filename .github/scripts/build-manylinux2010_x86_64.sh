@@ -1,9 +1,8 @@
 #!/bin/bash
 set -e -x
 
-cd $GITHUB_WORKSPACE
-git clone --recursive https://github.com/d-michail/python-jheaps.git
-cd python-jheaps
+echo "Current dir: `pwd`"
+ls $GITHUB_WORKSPACE
 
 # Build wheels for Python 3.6, 3.7, 3.8, 3.9
 # Although we have a manylinux compatible wheel generated directly from
