@@ -79,6 +79,10 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
     - name: Install swig (MacOS)
       if: runner.os == 'MacOS'
+      # the macos-14 runner image ships an untrusted aws/tap that blocks any
+      # brew install until trust is granted or checks are disabled
+      env:
+        HOMEBREW_NO_REQUIRE_TAP_TRUST: 1
       run: |
         brew install swig
     - name: Build Library

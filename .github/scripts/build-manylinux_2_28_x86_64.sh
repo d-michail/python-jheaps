@@ -14,6 +14,7 @@ PYVERSIONS="310 311 312 313 314"
 
 for V in $PYVERSIONS; do
     PYBIN=/opt/python/cp${V}-cp${V}/bin
+    "${PYBIN}/pip" install --upgrade pip setuptools wheel
     "${PYBIN}/python" setup.py bdist_wheel --plat-name=manylinux_2_28_x86_64
 done
 
