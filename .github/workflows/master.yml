@@ -12,8 +12,15 @@ jobs:
       image: dmichail/manylinux:1634888a5feacaf6c3b8e4d181d00fee57b390b4
     steps:
     - name: OS name
-      run: | 
+      run: |
         uname -a
+    - name: Setup GraalVM
+      id: setup-graalvm
+      uses: graalvm/setup-graalvm@v1
+      with:
+        java-version: '21'
+        distribution: 'graalvm-community'
+        github-token: ${{ secrets.GITHUB_TOKEN }}
     - name: Clone repository
       run: |
         git clone --recursive https://github.com/d-michail/python-jheaps.git $GITHUB_WORKSPACE/../python-jheaps
@@ -73,10 +80,6 @@ jobs:
       if: runner.os == 'MacOS'
       run: |
         brew install swig
-    - name: Install swig (Windows)
-      if: runner.os == 'Windows'
-      run: |
-        choco install swig --version=4.0.1
     - name: Build Library
       run: |
         pip install wheel
