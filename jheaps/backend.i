@@ -14,7 +14,15 @@
 }
 
 %typemap(argout,noblock=1) void **OUTPUT {
-    %append_output(SWIG_NewPointerObj(*$1, $*1_descriptor, SWIG_POINTER_NOSHADOW | %newpointer_flags));
+    // Not %append_output: since SWIG 4.1, SWIG_Python_AppendOutput only
+    // collapses a single appended value into a bare scalar when the
+    // wrapped C function's declared return type is void. Ours is int (the
+    // ignored status code, converted to None above), so is_void is always
+    // passed as 0 and this would otherwise always come back as a
+    // [None, value] list instead of value. There is always exactly one
+    // such OUTPUT parameter per call, so just replace the None outright.
+    Py_DECREF($result);
+    $result = SWIG_NewPointerObj(*$1, $*1_descriptor, SWIG_POINTER_NOSHADOW | %newpointer_flags);
 }
 
 %typemap(in,numinputs=0,noblock=1) char **OUTPUT ($*1_ltype temp) {
@@ -22,7 +30,30 @@
 }
 
 %typemap(argout,noblock=1) char **OUTPUT {
-    %append_output(SWIG_FromCharPtr(($*1_ltype)*$1));
+    Py_DECREF($result);
+    $result = SWIG_FromCharPtr(($*1_ltype)*$1);
+}
+
+// Override the <typemaps.i> OUTPUT argout typemaps for the same reason as
+// void **OUTPUT/char **OUTPUT above: their %append_output calls always pass
+// is_void=0 for our int-returning functions, so they'd come back as
+// [None, value] lists instead of a bare scalar. Plain CPython C API calls
+// are used here (rather than SWIG_From_*) since those helpers are only
+// emitted by SWIG's fragment system when referenced through its own
+// typemap machinery, which this bypasses.
+%typemap(argout,noblock=1) long long *OUTPUT {
+    Py_DECREF($result);
+    $result = PyLong_FromLongLong((long long)(*$1));
+}
+
+%typemap(argout,noblock=1) double *OUTPUT {
+    Py_DECREF($result);
+    $result = PyFloat_FromDouble((double)(*$1));
+}
+
+%typemap(argout,noblock=1) int *OUTPUT {
+    Py_DECREF($result);
+    $result = PyLong_FromLong((long)(*$1));
 }
 
 // convert a long to a void function pointer
@@ -157,7 +188,7 @@ int raise_exception_on_error(int result) {
 }
 
 // ignore the integer return code
-// we already handled this using the exception 
+// we already handled this using the exception
 %typemap(out) int  "$result = SWIG_Py_Void();";
 
 

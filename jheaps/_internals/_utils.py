@@ -50,11 +50,19 @@ def _id_comparator(a_id, b_id):
     a = _id_to_obj(a_id)
     b = _id_to_obj(b_id)
 
-    if a.__lt__(b): 
-        return -1
-    if a.__eq__(b): 
-        return 0
-    return 1
+    try:
+        if a < b:
+            return -1
+        if a == b:
+            return 0
+        return 1
+    except TypeError:
+        # objects with no defined ordering between them: fall back to a
+        # stable, arbitrary order based on identity so heap operations
+        # still work rather than raising
+        if a is b:
+            return 0
+        return -1 if id(a) < id(b) else 1
 
 
 def _create_wrapped_id_comparator_callback(callback): 

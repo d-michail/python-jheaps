@@ -9,25 +9,18 @@ jobs:
   build-linux:
     runs-on: ubuntu-22.04
     container:
-      image: dmichail/manylinux:1634888a5feacaf6c3b8e4d181d00fee57b390b4
+      image: dmichail/manylinux:f8ab71a9610b1fdbc7db19773dabd941d57858c2
     steps:
     - name: OS name
       run: |
         uname -a
-    - name: Setup GraalVM
-      # The container's glibc/libstdc++ are too old to run the Node.js runtime
-      # that JS-based actions (like graalvm/setup-graalvm) depend on, so
-      # GraalVM is installed here via plain shell instead, same as the
-      # manual git clone below works around actions/checkout for the same
-      # reason.
-      shell: bash
-      run: |
-        curl -fLo /tmp/graalvm.tar.gz https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-21.0.2/graalvm-community-jdk-21.0.2_linux-x64_bin.tar.gz
-        mkdir -p /opt/graalvm
-        tar -xzf /tmp/graalvm.tar.gz -C /opt/graalvm --strip-components=1
-        echo "JAVA_HOME=/opt/graalvm" >> $GITHUB_ENV
-        echo "/opt/graalvm/bin" >> $GITHUB_PATH
     - name: Clone repository
+      # actions/checkout isn't used here: the container's glibc/libstdc++
+      # are too old to run the Node.js runtime that JS-based actions depend
+      # on, so the repository is fetched via a manual git clone instead.
+      # ($GITHUB_WORKSPACE/../python-jheaps resolves back to $GITHUB_WORKSPACE
+      # itself, since the runner's workspace path already ends in
+      # .../python-jheaps/python-jheaps.)
       run: |
         git clone --recursive https://github.com/d-michail/python-jheaps.git $GITHUB_WORKSPACE/../python-jheaps
         git checkout $GITHUB_SHA
@@ -35,7 +28,7 @@ jobs:
       run: |
         ls $GITHUB_WORKSPACE
     - name: Build
-      run:  $GITHUB_WORKSPACE/.github/scripts/build-manylinux2010_x86_64.sh
+      run:  $GITHUB_WORKSPACE/.github/scripts/build-manylinux_2_28_x86_64.sh
       shell: bash
     - name: list all wheels
       run: |
@@ -55,14 +48,16 @@ jobs:
       fail-fast: true
       matrix:
         config:
-        - { os: windows-2022, python-version: "3.9" }
-        - { os: windows-2022, python-version: "3.8" }
-        - { os: windows-2022, python-version: "3.7" }
-        - { os: windows-2022, python-version: "3.6" }
-        - { os: macos-13,     python-version: "3.9" }
-        - { os: macos-13,     python-version: "3.8" }
-        - { os: macos-13,     python-version: "3.7" }
-        - { os: macos-13,     python-version: "3.6" }
+        - { os: windows-2022, python-version: "3.10" }
+        - { os: windows-2022, python-version: "3.11" }
+        - { os: windows-2022, python-version: "3.12" }
+        - { os: windows-2022, python-version: "3.13" }
+        - { os: windows-2022, python-version: "3.14" }
+        - { os: macos-14,     python-version: "3.10" }
+        - { os: macos-14,     python-version: "3.11" }
+        - { os: macos-14,     python-version: "3.12" }
+        - { os: macos-14,     python-version: "3.13" }
+        - { os: macos-14,     python-version: "3.14" }
     steps:
     - uses: actions/checkout@v4
       with:
@@ -110,14 +105,16 @@ jobs:
     strategy:
       matrix:
         config:
-        - { os: windows-2022, python-version: "3.9" }
-        - { os: windows-2022, python-version: "3.8" }
-        - { os: windows-2022, python-version: "3.7" }
-        - { os: windows-2022, python-version: "3.6" }
-        - { os: macos-13,     python-version: "3.9" }
-        - { os: macos-13,     python-version: "3.8" }
-        - { os: macos-13,     python-version: "3.7" }
-        - { os: macos-13,     python-version: "3.6" }
+        - { os: windows-2022, python-version: "3.10" }
+        - { os: windows-2022, python-version: "3.11" }
+        - { os: windows-2022, python-version: "3.12" }
+        - { os: windows-2022, python-version: "3.13" }
+        - { os: windows-2022, python-version: "3.14" }
+        - { os: macos-14,     python-version: "3.10" }
+        - { os: macos-14,     python-version: "3.11" }
+        - { os: macos-14,     python-version: "3.12" }
+        - { os: macos-14,     python-version: "3.13" }
+        - { os: macos-14,     python-version: "3.14" }
     steps:
     - name: Download artifacts
       uses: actions/download-artifact@v4
