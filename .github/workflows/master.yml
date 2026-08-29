@@ -87,7 +87,7 @@ jobs:
         brew install swig
     - name: Build Library
       run: |
-        pip install wheel
+        pip install --upgrade pip setuptools wheel
         python setup.py bdist_wheel
     - name: Install and run tests
       run: |
