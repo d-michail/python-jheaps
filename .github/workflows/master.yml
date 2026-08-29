@@ -15,12 +15,18 @@ jobs:
       run: |
         uname -a
     - name: Setup GraalVM
-      id: setup-graalvm
-      uses: graalvm/setup-graalvm@v1
-      with:
-        java-version: '21'
-        distribution: 'graalvm-community'
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+      # The container's glibc/libstdc++ are too old to run the Node.js runtime
+      # that JS-based actions (like graalvm/setup-graalvm) depend on, so
+      # GraalVM is installed here via plain shell instead, same as the
+      # manual git clone below works around actions/checkout for the same
+      # reason.
+      shell: bash
+      run: |
+        curl -fLo /tmp/graalvm.tar.gz https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-21.0.2/graalvm-community-jdk-21.0.2_linux-x64_bin.tar.gz
+        mkdir -p /opt/graalvm
+        tar -xzf /tmp/graalvm.tar.gz -C /opt/graalvm --strip-components=1
+        echo "JAVA_HOME=/opt/graalvm" >> $GITHUB_ENV
+        echo "/opt/graalvm/bin" >> $GITHUB_PATH
     - name: Clone repository
       run: |
         git clone --recursive https://github.com/d-michail/python-jheaps.git $GITHUB_WORKSPACE/../python-jheaps

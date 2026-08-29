@@ -106,10 +106,6 @@ char *jheaps_error_get_errno_msg();
 
 void jheaps_error_print_stack_trace();
 
-// vm
-
-void jheaps_vmLocatorSymbol();
-
 // exception handling
 // grab result from C and throw python exception
 

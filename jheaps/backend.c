@@ -73,13 +73,6 @@ void jheaps_error_print_stack_trace() {
     jheaps_capi_error_print_stack_trace(thread);
 }
 
-// vm
-
-void jheaps_vmLocatorSymbol() {
-    LAZY_THREAD_ATTACH
-    vmLocatorSymbol(thread);
-}
-
 // attribute store
 
 int jheaps_AHeap_D_insert_key(void *heap, double key, void** res) { 
