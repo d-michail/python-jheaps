@@ -22,6 +22,7 @@ jobs:
       # itself, since the runner's workspace path already ends in
       # .../python-jheaps/python-jheaps.)
       run: |
+        git config --global --add safe.directory '*'
         git clone --recursive https://github.com/d-michail/python-jheaps.git $GITHUB_WORKSPACE/../python-jheaps
         git checkout $GITHUB_SHA
     - name: ls GITHUB_WORKSPACE
@@ -66,7 +67,6 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.config.python-version }}
-        architecture: x64
     - name: Display Python version
       run: |
         python -c "import sys; print(sys.version)"
